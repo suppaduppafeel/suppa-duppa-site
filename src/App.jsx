@@ -64,10 +64,10 @@ const css = `
   .sd-hero {
     position: relative;
     display: grid;
-    grid-template-columns: 1.05fr 0.95fr;
-    gap: 40px;
+    grid-template-columns: 1.08fr 0.92fr;
+    gap: 56px;
     align-items: center;
-    padding: 84px 0 52px;
+    padding: 72px 0 52px;
   }
 
   .sd-pill {
@@ -92,15 +92,27 @@ const css = `
     box-shadow: 0 0 18px rgba(249, 115, 22, 0.5);
   }
 
+  .sd-logo-frame {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 18px 0 14px;
+    padding: 18px 20px;
+    border-radius: 28px;
+    background: rgba(255,255,255,0.82);
+    border: 1px solid rgba(255,255,255,0.72);
+    box-shadow: 0 20px 44px rgba(15,23,42,0.08);
+    backdrop-filter: blur(10px);
+  }
+
   .sd-logo-main {
-    width: 360px;
+    width: 320px;
     max-width: 100%;
-    margin: 18px 0 12px;
-    filter: drop-shadow(0 22px 40px rgba(0,0,0,0.18));
+    filter: drop-shadow(0 18px 28px rgba(0,0,0,0.12));
   }
 
   .sd-kicker {
-    margin: 0 0 14px;
+    margin: 0 0 18px;
     font-size: 18px;
     line-height: 1.2;
     letter-spacing: 0.24em;
@@ -111,7 +123,7 @@ const css = `
 
   .sd-title {
     margin: 0;
-    max-width: 760px;
+    max-width: 680px;
     font-size: clamp(52px, 7vw, 92px);
     line-height: 0.95;
     letter-spacing: -0.05em;
@@ -992,8 +1004,7 @@ const css = `
     box-shadow: 0 14px 28px rgba(255,255,255,0.18);
   }
 
-  @media (min-width: 1100px) {
-    .sd-panther { display: block; }
+  
   }
 
   @media (max-width: 1100px) {
@@ -1262,7 +1273,7 @@ export default function SuppaDuppaSummerSite() {
           <div className="sd-overlay" />
           <div className="sd-blur-a" />
           <div className="sd-blur-b" />
-          <PantherBanner />
+          
 
           <div className="sd-shell">
             <div className="sd-hero">
@@ -1272,9 +1283,15 @@ export default function SuppaDuppaSummerSite() {
                   Summer drop is live
                 </div>
 
-                <img src={logoSrc} alt="Suppa Duppa" className="sd-logo-main" />
+                <div className="sd-logo-frame">
+                  <img src={logoSrc} alt="Suppa Duppa" className="sd-logo-main" />
+                </div>
 
                 <p className="sd-kicker">How You Feelin'? Suppa Duppa.</p>
+
+                <p style={{ margin: "0 0 10px", maxWidth: 620, fontSize: 15, lineHeight: 1.7, color: "#64748b", fontWeight: 700 }}>
+                  Bright logo. Clean layout. Soft beach energy. A smoother first look that feels easy to shop.
+                </p>
 
                 <h1 className="sd-title">
                   Beach-ready hats and tanks with pure <span className="sd-title-gradient">summer mood</span>.
