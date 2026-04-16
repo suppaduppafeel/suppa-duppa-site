@@ -206,6 +206,8 @@ const css = `
     justify-content: center;
     margin: 4px 0 12px;
     padding: 0;
+    max-width: 100%;
+    overflow: visible;
   }
   .logo-frame {
     position: relative;
@@ -222,6 +224,8 @@ const css = `
   .logo-main {
     width: 450px;
     max-width: 100%;
+    height: auto;
+    object-fit: contain;
     filter: drop-shadow(0 20px 30px rgba(0,0,0,0.12)) drop-shadow(0 8px 14px rgba(255,255,255,0.18));
     animation: floatLogo 5.6s ease-in-out infinite;
   }
@@ -871,15 +875,77 @@ const css = `
     }
   }
   @media (max-width: 768px) {
-    .container { width: min(100% - 24px, 100%); }
-    .hero { padding-top: 42px; }
-    .title { font-size: 42px; }
-    .body { font-size: 17px; }
+    .container { width: min(100% - 22px, 100%); }
+    .hero {
+      position: relative;
+      padding-top: 92px;
+      gap: 22px;
+    }
+    .title {
+      font-size: 44px;
+      max-width: 100%;
+    }
+    .body {
+      font-size: 18px;
+      max-width: 100%;
+    }
+    .body-sub {
+      font-size: 15px;
+      max-width: 100%;
+    }
     .stats, .grid, .featured-grid, .card-grid { grid-template-columns: 1fr; }
     .showcase { gap: 16px; }
     .row-title, .picker-title { font-size: 30px; }
-    .logo-main { width: 300px; }
-    .picker-wrap { max-width: 100%; }
+    .logo-scene {
+      width: 100%;
+      justify-content: flex-start;
+      margin: 6px 0 16px;
+    }
+    .logo-main {
+      width: min(100%, 360px);
+    }
+    .picker-wrap {
+      position: absolute;
+      top: 8px;
+      right: 0;
+      left: auto;
+      width: auto;
+      max-width: 230px;
+      z-index: 3;
+    }
+    .picker-blur {
+      inset: -6px;
+      border-radius: 999px;
+      filter: blur(10px);
+    }
+    .picker {
+      border-radius: 999px;
+      padding: 10px 12px;
+      box-shadow: 0 14px 30px rgba(251,146,60,0.12);
+    }
+    .picker-top,
+    .featured {
+      display: none;
+    }
+    .color-list {
+      margin: 0;
+      gap: 8px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .color-list::-webkit-scrollbar {
+      display: none;
+    }
+    .color-btn {
+      padding: 8px 12px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .mini-copy {
+      max-width: 100%;
+      font-size: 14px;
+    }
   }
 `;
 
