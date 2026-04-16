@@ -1,4 +1,54 @@
 import React, { useMemo, useState } from "react";
+const logoSvg = encodeURIComponent(`
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520">
+    <defs>
+      <linearGradient id="gold" x1="0" x2="1">
+        <stop offset="0%" stop-color="#ffe066"/>
+        <stop offset="100%" stop-color="#ffb703"/>
+      </linearGradient>
+      <linearGradient id="blue" x1="0" x2="1">
+        <stop offset="0%" stop-color="#d8f3ff"/>
+        <stop offset="100%" stop-color="#3bb8ff"/>
+      </linearGradient>
+      <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#1e1b4b" flood-opacity="0.22"/>
+      </filter>
+    </defs>
+    <g filter="url(#shadow)">
+      <g transform="translate(0 8)">
+        <ellipse cx="440" cy="138" rx="148" ry="104" fill="#ff9ac4" stroke="#6f123d" stroke-width="10"/>
+        <ellipse cx="351" cy="112" rx="26" ry="36" fill="#ff9ac4" stroke="#6f123d" stroke-width="10"/>
+        <ellipse cx="529" cy="112" rx="26" ry="36" fill="#ff9ac4" stroke="#6f123d" stroke-width="10"/>
+        <rect x="360" y="108" rx="20" ry="20" width="72" height="36" fill="#111827"/>
+        <rect x="448" y="108" rx="20" ry="20" width="72" height="36" fill="#111827"/>
+        <rect x="426" y="120" rx="10" ry="10" width="26" height="10" fill="#111827"/>
+        <path d="M 418 160 Q 440 174 462 160" stroke="#6f123d" stroke-width="8" fill="none" stroke-linecap="round"/>
+        <path d="M 470 170 Q 578 158 640 178" stroke="#111827" stroke-width="7" fill="none" stroke-linecap="round"/>
+        <path d="M 470 186 Q 586 184 650 204" stroke="#111827" stroke-width="7" fill="none" stroke-linecap="round"/>
+        <path d="M 410 170 Q 302 158 240 178" stroke="#111827" stroke-width="7" fill="none" stroke-linecap="round"/>
+        <path d="M 410 186 Q 294 184 230 204" stroke="#111827" stroke-width="7" fill="none" stroke-linecap="round"/>
+        <rect x="300" y="194" rx="24" ry="24" width="146" height="40" fill="#ffb6d5" stroke="#6f123d" stroke-width="8"/>
+        <rect x="430" y="194" rx="24" ry="24" width="168" height="40" fill="#ffb6d5" stroke="#6f123d" stroke-width="8"/>
+      </g>
+      <g>
+        <text x="450" y="308" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="150" fill="#2e1065" stroke="#2e1065" stroke-width="40" paint-order="stroke">Suppa</text>
+        <text x="450" y="308" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="150" fill="url(#gold)" stroke="#fff7ed" stroke-width="10" paint-order="stroke">Suppa</text>
+        <text x="450" y="438" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="148" fill="#2e1065" stroke="#2e1065" stroke-width="40" paint-order="stroke">Duppa</text>
+        <text x="450" y="438" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="148" fill="url(#blue)" stroke="#fff7ed" stroke-width="10" paint-order="stroke">Duppa</text>
+      </g>
+      <g opacity="0.95">
+        <circle cx="172" cy="262" r="15" fill="#ffd60a"/>
+        <circle cx="126" cy="330" r="14" fill="#ff9f1c"/>
+        <circle cx="730" cy="250" r="16" fill="#38bdf8"/>
+        <circle cx="778" cy="328" r="15" fill="#ffd60a"/>
+        <circle cx="202" cy="404" r="18" fill="#ec4899"/>
+        <circle cx="714" cy="394" r="18" fill="#ec4899"/>
+      </g>
+    </g>
+  </svg>
+`);
+
+const logoSrc = `data:image/svg+xml;charset=UTF-8,${logoSvg}`;
 
 const hatColors = [
   {
@@ -70,7 +120,7 @@ const products = [
   },
 ];
 
-const logoSrc = "data:image/webp;base64,UklGRmKqAABXRUJQVlA4IFaqAAAQAgOdASq8AtIBPlEmkEWjoiGTOxyUOAUEpszmD4720/tV//9n834o7l/25+GJav6+3U58Wtwu4ls05O/X74v6d/P/4ieDwS13v89yX/4/Nf/H4f3L/pf7X/X/tv9L/6f9L+WZP+8P0z/Y31B9A+rf0b/kP4D+Mfof8sP4N+qf0n+4/nb+kf+j+qP0X+wfzj+9P7x+Jf8g9b+ifvv8n/fv7l/Bv9P/f3+6/1v9x/xv+f/jv7f/1P/Xf8b/n/4b+g/6T+9f4r+N/1H/Ef5b+if1r9w/6n/0P9T/0X+H/xP+o/1n+jf9h/Nv9W+2f8R/mv+z/xX+Y/w3/Xf6f/2f9v/fj9x/yn+u/6f+2/lf/9f6X+8f4j/Pf7P/Hf5P/3v/Hf4n+6/zP+n/0X/nv+U/oX/lP8r/5z+z/5v+4/5P+v/8p+0f+J/xv+n/0f/nv8p/9r/3H+I/1v+W/1n/2v+0/wv+X/4r/qv7j/gf9H/8f8b/lv+H/0n+G/2P+G/4v/Xf4L+0v7j+fv+o/s3+6/7v/8f/4f/f/8n/6r+n/5v7T/af+Y/ov/Tf5T/Pf8H/uv7L+x/6v+N/2P+N/0P+N/6z+2/6v+Y/0n+H/6r/ef8L+N/0n/jf9j/oP6r/Uf7v+o/1v+ef5v/Nf5n/Nv7v+of8L/Tf5b/av8X/jv9V/lP9P/if8J/pP6n+qf7f+ef+Y/3H+J/3H+2f5T/Z/3n+of6j+if2z/xn+5/2P+f/4j/uv+5/1P+4/5v/Vf7b+q/2n+N/0v+P/yn+m/7v+q/3v+v/6r/4P9T/8f4f8X/qv8f/mP+4/xv+4/7P/3v9B/6r+1/0n+J/6r+8f7n/ev9l/vP+W/y3+8/4j/Sf6P/Uf8X+F/7f+f/1n/Tf6v+of5j/ff6f+6/1X+K/0X+4/7n+j/5D/ff8j/if+b/wP+9/xP+8/xX+w/4v+e/0v+ef0r/vP7f/fv+9/0X+S/2H+2/0P+T/7f+H/6z+Q/5P+M/0X+g/7b+j/1n+T/1X+L/4X/Pf8b/qv8j/gv7v+O/2v+z/yP+af7T/Mf8r/mP+2/6f+z/7P+f/6r+9/4z/Z/1H+q/9J/rP89/8f/qv+M/zP+0/2P+g/1v+j/z3+4/3n+8/2X+0/5f+3/6T+q/5n+Y/6P+y/3n+J/3P+8/vP/vP+u/3n+W/2n+af6z+4/7v+3/5T+5/5P/W/2n+4/5r+7/3H+F/0v+q/7P+H/3v+w/7z+T/8f/6P+5/4L/7f+2/1X+r/2H+7/5T+Y/4T+v/6r+J/2v/fv8D/qv9N/pP8f/mf8T+vf+L/1P+b/4j+2/4T+vf6z+v/5T+7/3H+e/3X+3/2P+T/8b+df3H+q/8v+6/3n/J/5H+o/4j+2/0n+K/3f+q/7T/Xf8X+vf6T+8/2P+I/1v+g/0n+9/wv+V/0n+9/vP+J/5v/7v/hf7X/3v+f/4z/Z/4j+3/6X+ef+M/2X+R/4f+0/8P+M/3f+p/6b+7/0v+2/xX+vf8j/u/7z/Xf5r+tf6f+6/0v+J/5P+H/0v/Nf6n+e/0X/Pf6n+N/4z+X/7j+X/8X/0f/Mf6z+F/6P+q/5P+z/8f/6v+6/3n+M/4j+1/5T+9/7P+2/1n+6/6X+0/7r+cv8f/O/6X+pf6j/Av9Z/6n/Av7j+Pf7r+pf7n+cv3r+3/0v+n/7r+V/6b+vP3n+cv0P+L/8v8qYAA==";
+
 
 const css = `
   * { box-sizing: border-box; }
@@ -932,6 +982,9 @@ function MockupShowcase() {
     </div>
   );
 }
+
+// For GitHub/Vercel, swap the two lines above with:
+// import logoSrc from "./suppa-duppa-logo.png";
 
 export default function App() {
   const [activeColor, setActiveColor] = useState(hatColors[0].name);
