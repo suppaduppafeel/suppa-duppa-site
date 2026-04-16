@@ -1,98 +1,255 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import logoSrc from "./suppa-duppa-logo.png";
+import React, { useMemo, useState } from "react";
+
+const hatColors = [
+  {
+    name: "Sunset Coral",
+    gradient: "linear-gradient(135deg, #fff1e8 0%, #ffe3b3 28%, #ff8fb1 62%, #ff6b8a 100%)",
+    panel: "linear-gradient(135deg, rgba(255,184,116,0.95) 0%, rgba(255,149,181,0.92) 55%, rgba(255,105,180,0.96) 100%)",
+    accent: "Coral Heat",
+    glowA: "rgba(255, 148, 120, 0.28)",
+    glowB: "rgba(255, 105, 180, 0.22)",
+  },
+  {
+    name: "Ocean Aqua",
+    gradient: "linear-gradient(135deg, #ecfeff 0%, #d7f9ff 22%, #8fe3ff 58%, #4f8dff 100%)",
+    panel: "linear-gradient(135deg, rgba(127,236,255,0.96) 0%, rgba(72,199,255,0.94) 52%, rgba(71,127,255,0.96) 100%)",
+    accent: "Cool Splash",
+    glowA: "rgba(56, 189, 248, 0.26)",
+    glowB: "rgba(59, 130, 246, 0.24)",
+  },
+  {
+    name: "Palm Lime",
+    gradient: "linear-gradient(135deg, #f7ffe1 0%, #e9ffb3 26%, #8ee58f 62%, #3bcf86 100%)",
+    panel: "linear-gradient(135deg, rgba(202,255,113,0.96) 0%, rgba(82,221,128,0.95) 55%, rgba(34,197,94,0.96) 100%)",
+    accent: "Fresh Energy",
+    glowA: "rgba(132, 204, 22, 0.26)",
+    glowB: "rgba(34, 197, 94, 0.22)",
+  },
+  {
+    name: "Sand Cream",
+    gradient: "linear-gradient(135deg, #fff8ea 0%, #fff1bf 28%, #ffe59a 55%, #ffbf71 100%)",
+    panel: "linear-gradient(135deg, rgba(255,229,153,0.96) 0%, rgba(255,238,196,0.94) 52%, rgba(255,186,110,0.96) 100%)",
+    accent: "Soft Shore",
+    glowA: "rgba(255, 213, 128, 0.28)",
+    glowB: "rgba(251, 191, 36, 0.18)",
+  },
+];
+
+const products = [
+  {
+    id: "suppa-duppa-snapback",
+    name: "Suppa Duppa Snapback",
+    type: "Hat",
+    vibe: "Light, bright, and easy for sunny fits.",
+    price: "$34",
+    badge: "Best Seller",
+  },
+  {
+    id: "wave-runner-tank",
+    name: "Wave Runner Tank",
+    type: "Tank",
+    vibe: "Breezy color and shoreline-ready energy.",
+    price: "$29",
+    badge: "New Drop",
+  },
+  {
+    id: "palm-breeze-tank",
+    name: "Palm Breeze Tank",
+    type: "Tank",
+    vibe: "Smooth summer feel with playful pop.",
+    price: "$29",
+    badge: "Summer Pick",
+  },
+  {
+    id: "shoreline-hat",
+    name: "Shoreline Hat",
+    type: "Hat",
+    vibe: "Clean beach mood for everyday wear.",
+    price: "$34",
+    badge: "Fresh Color",
+  },
+];
+
+const logoSvg = encodeURIComponent(`
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520">
+    <defs>
+      <linearGradient id="gold" x1="0" x2="1">
+        <stop offset="0%" stop-color="#ffe066"/>
+        <stop offset="100%" stop-color="#ffb703"/>
+      </linearGradient>
+      <linearGradient id="blue" x1="0" x2="1">
+        <stop offset="0%" stop-color="#d8f3ff"/>
+        <stop offset="100%" stop-color="#3bb8ff"/>
+      </linearGradient>
+      <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#1e1b4b" flood-opacity="0.22"/>
+      </filter>
+    </defs>
+    <g filter="url(#shadow)">
+      <g transform="translate(0 8)">
+        <ellipse cx="440" cy="138" rx="148" ry="104" fill="#ff9ac4" stroke="#6f123d" stroke-width="10"/>
+        <ellipse cx="351" cy="112" rx="26" ry="36" fill="#ff9ac4" stroke="#6f123d" stroke-width="10"/>
+        <ellipse cx="529" cy="112" rx="26" ry="36" fill="#ff9ac4" stroke="#6f123d" stroke-width="10"/>
+        <rect x="360" y="108" rx="20" ry="20" width="72" height="36" fill="#111827"/>
+        <rect x="448" y="108" rx="20" ry="20" width="72" height="36" fill="#111827"/>
+        <rect x="426" y="120" rx="10" ry="10" width="26" height="10" fill="#111827"/>
+        <path d="M 418 160 Q 440 174 462 160" stroke="#6f123d" stroke-width="8" fill="none" stroke-linecap="round"/>
+        <path d="M 470 170 Q 578 158 640 178" stroke="#111827" stroke-width="7" fill="none" stroke-linecap="round"/>
+        <path d="M 470 186 Q 586 184 650 204" stroke="#111827" stroke-width="7" fill="none" stroke-linecap="round"/>
+        <path d="M 410 170 Q 302 158 240 178" stroke="#111827" stroke-width="7" fill="none" stroke-linecap="round"/>
+        <path d="M 410 186 Q 294 184 230 204" stroke="#111827" stroke-width="7" fill="none" stroke-linecap="round"/>
+        <rect x="300" y="194" rx="24" ry="24" width="146" height="40" fill="#ffb6d5" stroke="#6f123d" stroke-width="8"/>
+        <rect x="430" y="194" rx="24" ry="24" width="168" height="40" fill="#ffb6d5" stroke="#6f123d" stroke-width="8"/>
+      </g>
+      <g>
+        <text x="450" y="308" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="150" fill="#2e1065" stroke="#2e1065" stroke-width="40" paint-order="stroke">Suppa</text>
+        <text x="450" y="308" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="150" fill="url(#gold)" stroke="#fff7ed" stroke-width="10" paint-order="stroke">Suppa</text>
+        <text x="450" y="438" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="148" fill="#2e1065" stroke="#2e1065" stroke-width="40" paint-order="stroke">Duppa</text>
+        <text x="450" y="438" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="148" fill="url(#blue)" stroke="#fff7ed" stroke-width="10" paint-order="stroke">Duppa</text>
+      </g>
+      <g opacity="0.95">
+        <circle cx="172" cy="262" r="15" fill="#ffd60a"/>
+        <circle cx="126" cy="330" r="14" fill="#ff9f1c"/>
+        <circle cx="730" cy="250" r="16" fill="#38bdf8"/>
+        <circle cx="778" cy="328" r="15" fill="#ffd60a"/>
+        <circle cx="202" cy="404" r="18" fill="#ec4899"/>
+        <circle cx="714" cy="394" r="18" fill="#ec4899"/>
+      </g>
+    </g>
+  </svg>
+`);
+
+const logoSrc = `data:image/svg+xml;charset=UTF-8,${logoSvg}`;
 
 const css = `
   * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   body {
     margin: 0;
     font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     color: #0f172a;
-    background: linear-gradient(180deg, #fff7ed 0%, #fde68a 22%, #fef3c7 38%, #dbeafe 70%, #e0f2fe 100%);
   }
-  a { color: inherit; text-decoration: none; }
   img { display: block; max-width: 100%; }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; }
 
-  .sd-site {
-    min-height: 100vh;
+  @keyframes vibeShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  @keyframes floatOne {
+    0%, 100% { transform: translate3d(0,0,0) scale(1); }
+    50% { transform: translate3d(22px,-18px,0) scale(1.05); }
+  }
+  @keyframes floatTwo {
+    0%, 100% { transform: translate3d(0,0,0) scale(1); }
+    50% { transform: translate3d(-28px,24px,0) scale(1.08); }
+  }
+  @keyframes floatLogo {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  @keyframes pulseGlow {
+    0%, 100% { box-shadow: 0 18px 36px rgba(15, 23, 42, 0.16); }
+    50% { box-shadow: 0 24px 48px rgba(15, 23, 42, 0.24); }
+  }
+  @keyframes cardDrift {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+  @keyframes shimmer {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
   }
 
-  .sd-section {
+  .site {
+    min-height: 100vh;
     position: relative;
     overflow: hidden;
+    color: #0f172a;
+    background-image: var(--siteGradient);
+    background-size: 240% 240%;
+    animation: vibeShift 16s ease infinite;
+    transition: background-image .6s ease;
   }
-
-  .sd-shell {
-    width: min(1280px, calc(100% - 48px));
-    margin: 0 auto;
-  }
-
-  .sd-blur-a,
-  .sd-blur-b {
+  .ambient {
     position: absolute;
     border-radius: 999px;
-    filter: blur(60px);
+    filter: blur(70px);
     pointer-events: none;
+    z-index: 0;
   }
-
-  .sd-blur-a {
-    left: -80px;
-    top: 110px;
+  .ambient.one {
+    left: -90px;
+    top: 90px;
+    width: 300px;
+    height: 300px;
+    background: var(--glowA);
+    animation: floatOne 12s ease-in-out infinite;
+  }
+  .ambient.two {
+    right: -70px;
+    top: 40px;
+    width: 360px;
+    height: 360px;
+    background: var(--glowB);
+    animation: floatTwo 14s ease-in-out infinite;
+  }
+  .ambient.three {
+    left: 38%;
+    bottom: 180px;
     width: 260px;
     height: 260px;
-    background: rgba(244, 114, 182, 0.22);
+    background: rgba(255,255,255,0.18);
+    filter: blur(90px);
+    animation: floatOne 18s ease-in-out infinite;
   }
-
-  .sd-blur-b {
-    right: 0;
-    top: 0;
-    width: 320px;
-    height: 320px;
-    background: rgba(34, 211, 238, 0.18);
-  }
-
-  .sd-overlay {
+  .overlay {
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(circle at top left, rgba(255,255,255,0.95), transparent 30%),
-      radial-gradient(circle at top right, rgba(255,255,255,0.75), transparent 26%),
-      radial-gradient(circle at bottom, rgba(14,165,233,0.12), transparent 30%);
-    opacity: 0.65;
+      radial-gradient(circle at top left, rgba(255,255,255,0.94), transparent 28%),
+      radial-gradient(circle at top right, rgba(255,255,255,0.7), transparent 26%),
+      radial-gradient(circle at bottom, rgba(255,255,255,0.22), transparent 34%);
     pointer-events: none;
+    z-index: 0;
+  }
+  .container {
+    width: min(1280px, calc(100% - 48px));
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
   }
 
-  .sd-hero {
-    position: relative;
+  .hero {
     display: grid;
     grid-template-columns: 1.08fr 0.92fr;
     gap: 56px;
     align-items: center;
-    padding: 72px 0 52px;
+    padding: 76px 0 52px;
   }
-
-  .sd-pill {
+  .pill {
     display: inline-flex;
     align-items: center;
     gap: 10px;
     padding: 10px 16px;
     border-radius: 999px;
     background: rgba(255,255,255,0.62);
-    border: 1px solid rgba(255,255,255,0.65);
+    border: 1px solid rgba(255,255,255,0.68);
     backdrop-filter: blur(10px);
     font-size: 14px;
     font-weight: 700;
     color: #334155;
   }
-
-  .sd-spark {
+  .spark {
     width: 8px;
     height: 8px;
     border-radius: 999px;
     background: #f97316;
-    box-shadow: 0 0 18px rgba(249, 115, 22, 0.5);
+    box-shadow: 0 0 18px rgba(249,115,22,.5);
   }
-
-  .sd-logo-frame {
+  .logo-frame {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -102,16 +259,15 @@ const css = `
     background: rgba(255,255,255,0.82);
     border: 1px solid rgba(255,255,255,0.72);
     box-shadow: 0 20px 44px rgba(15,23,42,0.08);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(12px);
   }
-
-  .sd-logo-main {
+  .logo-main {
     width: 320px;
     max-width: 100%;
     filter: drop-shadow(0 18px 28px rgba(0,0,0,0.12));
+    animation: floatLogo 5.6s ease-in-out infinite;
   }
-
-  .sd-kicker {
+  .kicker {
     margin: 0 0 18px;
     font-size: 18px;
     line-height: 1.2;
@@ -120,33 +276,39 @@ const css = `
     font-weight: 900;
     color: #0891b2;
   }
-
-  .sd-title {
+  .mini-copy {
+    margin: 0 0 10px;
+    max-width: 620px;
+    font-size: 15px;
+    line-height: 1.7;
+    color: #64748b;
+    font-weight: 700;
+  }
+  .title {
     margin: 0;
     max-width: 680px;
     font-size: clamp(52px, 7vw, 92px);
-    line-height: 0.95;
+    line-height: .95;
     letter-spacing: -0.05em;
     font-weight: 900;
     color: #0f172a;
   }
-
-  .sd-title-gradient {
-    background: linear-gradient(90deg, #f97316 0%, #ec4899 48%, #06b6d4 100%);
+  .gradient-text {
+    background: linear-gradient(90deg,#f97316,#ec4899,#06b6d4,#8b5cf6,#f97316);
+    background-size: 300% 300%;
+    animation: shimmer 8s linear infinite;
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
-
-  .sd-body {
+  .body {
     margin: 24px 0 0;
     max-width: 720px;
     font-size: 22px;
     line-height: 1.7;
     color: #475569;
   }
-
-  .sd-body-sub {
+  .body-sub {
     margin: 14px 0 0;
     max-width: 760px;
     font-size: 18px;
@@ -154,16 +316,13 @@ const css = `
     color: #64748b;
     font-weight: 700;
   }
-
-  .sd-actions {
+  .actions {
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
     margin-top: 30px;
   }
-
-  .sd-btn,
-  .sd-btn-outline {
+  .btn, .btn-outline {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -172,151 +331,128 @@ const css = `
     padding: 0 28px;
     border-radius: 999px;
     font-weight: 800;
-    transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
     cursor: pointer;
+    transition: transform .18s ease, box-shadow .18s ease;
   }
-
-  .sd-btn {
+  .btn {
     background: #0f172a;
-    color: #ffffff;
-    box-shadow: 0 18px 36px rgba(15, 23, 42, 0.16);
+    color: #fff;
+    animation: pulseGlow 4s ease-in-out infinite;
   }
-
-  .sd-btn:hover,
-  .sd-btn-outline:hover,
-  .sd-card-btn:hover,
-  .sd-email-btn:hover {
-    transform: translateY(-1px);
-  }
-
-  .sd-btn-outline {
+  .btn-outline {
     background: rgba(255,255,255,0.62);
     border: 1px solid rgba(255,255,255,0.7);
     color: #0f172a;
     backdrop-filter: blur(10px);
   }
+  .btn:hover, .btn-outline:hover, .card-btn:hover, .email-btn:hover { transform: translateY(-1px); }
 
-  .sd-stats {
+  .stats {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 16px;
     max-width: 720px;
     margin-top: 34px;
   }
-
-  .sd-stat {
+  .stat {
     border-radius: 26px;
     padding: 20px;
     background: rgba(255,255,255,0.62);
     border: 1px solid rgba(255,255,255,0.7);
     backdrop-filter: blur(10px);
+    animation: cardDrift 8s ease-in-out infinite;
   }
-
-  .sd-stat-number {
+  .stat:nth-child(2) { animation-delay: .8s; }
+  .stat:nth-child(3) { animation-delay: 1.6s; }
+  .stat-number {
     font-size: 44px;
     line-height: 1;
     font-weight: 900;
     color: #0f172a;
   }
-
-  .sd-stat-label {
+  .stat-label {
     margin-top: 8px;
     font-size: 15px;
     color: #64748b;
   }
 
-  .sd-picker-wrap {
-    position: relative;
-  }
-
-  .sd-picker-blur {
+  .picker-wrap { position: relative; }
+  .picker-blur {
     position: absolute;
     inset: -14px;
     border-radius: 34px;
     background: rgba(255,255,255,0.35);
     filter: blur(18px);
   }
-
-  .sd-picker {
+  .picker {
     position: relative;
     border-radius: 34px;
     padding: 22px;
     background: rgba(255,255,255,0.55);
     border: 1px solid rgba(255,255,255,0.7);
-    box-shadow: 0 30px 70px rgba(251, 146, 60, 0.16);
+    box-shadow: 0 30px 70px rgba(251,146,60,0.16);
     backdrop-filter: blur(12px);
   }
-
-  .sd-picker-top {
+  .picker-top {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     gap: 16px;
     margin-bottom: 20px;
   }
-
-  .sd-picker-label {
+  .picker-label {
     font-size: 13px;
     line-height: 1.2;
-    letter-spacing: 0.35em;
+    letter-spacing: .35em;
     text-transform: uppercase;
     font-weight: 900;
     color: #f97316;
   }
-
-  .sd-picker-title {
+  .picker-title {
     margin: 8px 0 0;
     font-size: 36px;
     line-height: 1.05;
     font-weight: 900;
     color: #0f172a;
   }
-
-  .sd-sun {
-    font-size: 28px;
-  }
-
-  .sd-color-list {
+  .sun { font-size: 28px; animation: floatLogo 4s ease-in-out infinite; }
+  .color-list {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
     margin-bottom: 22px;
   }
-
-  .sd-color-btn {
+  .color-btn {
     border: 1px solid rgba(255,255,255,0.76);
     background: rgba(255,255,255,0.7);
     color: #334155;
     padding: 12px 18px;
     border-radius: 999px;
+    cursor: pointer;
     font-size: 14px;
     font-weight: 700;
-    cursor: pointer;
   }
-
-  .sd-color-btn.is-active {
+  .color-btn.active {
     background: #0f172a;
-    color: #ffffff;
+    color: #fff;
     border-color: #0f172a;
   }
 
-  .sd-featured {
+  .featured {
     position: relative;
     overflow: hidden;
     border-radius: 28px;
     padding: 22px;
     min-height: 380px;
   }
-
-  .sd-featured::after {
+  .featured::after {
     content: "";
     position: absolute;
     inset: 0;
     background: radial-gradient(circle at top, rgba(255,255,255,0.85), transparent 35%);
     pointer-events: none;
   }
-
-  .sd-featured-card {
+  .featured-card {
     position: relative;
     z-index: 1;
     border-radius: 24px;
@@ -325,75 +461,69 @@ const css = `
     border: 1px solid rgba(255,255,255,0.46);
     backdrop-filter: blur(8px);
   }
-
-  .sd-featured-label {
+  .featured-label {
     font-size: 11px;
-    letter-spacing: 0.38em;
+    letter-spacing: .38em;
     text-transform: uppercase;
     font-weight: 900;
     color: rgba(255,255,255,0.95);
   }
-
-  .sd-featured-grid {
+  .featured-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0,1fr));
     gap: 16px;
     margin-top: 18px;
   }
-
-  .sd-product-mini {
+  .product-mini {
     border-radius: 22px;
     background: rgba(255,255,255,0.82);
     padding: 16px;
-    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+    box-shadow: 0 12px 30px rgba(15,23,42,0.08);
+    animation: cardDrift 7s ease-in-out infinite;
   }
-
-  .sd-product-mini-title {
+  .product-mini:nth-child(2) { animation-delay: .7s; }
+  .product-mini-title {
     margin-top: 12px;
     text-align: center;
     font-size: 12px;
-    letter-spacing: 0.28em;
+    letter-spacing: .28em;
     text-transform: uppercase;
     font-weight: 800;
     color: #64748b;
   }
-
-  .sd-product-mini-logo {
+  .product-mini-logo {
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
-  .sd-hat {
+  .hat {
     position: relative;
     width: 150px;
     height: 96px;
     margin: 0 auto;
   }
-
-  .sd-hat-crown {
+  .hat-crown {
     position: absolute;
     left: 20px;
     top: 16px;
     width: 110px;
     height: 46px;
     border-radius: 999px 999px 24px 24px;
-    background: #ffffff;
+    background: #fff;
     box-shadow: 0 8px 18px rgba(15,23,42,0.08);
   }
-
-  .sd-hat-brim {
+  .hat-brim {
     position: absolute;
     left: 68px;
     top: 52px;
     width: 72px;
     height: 14px;
     border-radius: 999px;
-    background: #ffffff;
+    background: #fff;
     box-shadow: 0 6px 14px rgba(15,23,42,0.08);
   }
-
-  .sd-hat-logo {
+  .hat-logo {
     position: absolute;
     left: 42px;
     top: 18px;
@@ -403,18 +533,16 @@ const css = `
     background: rgba(255,255,255,0.92);
     box-shadow: 0 4px 14px rgba(15,23,42,0.08);
   }
-
-  .sd-tank {
+  .tank {
     position: relative;
     width: 94px;
     height: 124px;
     margin: 0 auto;
     border-radius: 22px;
-    background: #ffffff;
+    background: #fff;
     box-shadow: 0 10px 22px rgba(15,23,42,0.08);
   }
-
-  .sd-tank-neck {
+  .tank-neck {
     position: absolute;
     left: 50%;
     top: -8px;
@@ -422,11 +550,10 @@ const css = `
     height: 22px;
     transform: translateX(-50%);
     border-radius: 0 0 22px 22px;
-    border: 6px solid #ffffff;
+    border: 6px solid #fff;
     border-top: 0;
   }
-
-  .sd-tank-logo {
+  .tank-logo {
     position: absolute;
     left: 10px;
     right: 10px;
@@ -436,8 +563,7 @@ const css = `
     background: rgba(255,255,255,0.94);
     box-shadow: 0 4px 14px rgba(15,23,42,0.06);
   }
-
-  .sd-featured-copy {
+  .featured-copy {
     margin-top: 16px;
     text-align: center;
     color: rgba(255,255,255,0.96);
@@ -446,82 +572,59 @@ const css = `
     font-weight: 700;
   }
 
-  .sd-shopify {
-    padding: 24px 0 26px;
-  }
-
-  .sd-row {
+  .shopify { padding: 24px 0 26px; }
+  .row {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
     gap: 24px;
     margin-bottom: 26px;
   }
-
-  .sd-row-kicker {
+  .row-kicker {
     font-size: 13px;
     line-height: 1.2;
-    letter-spacing: 0.38em;
+    letter-spacing: .38em;
     text-transform: uppercase;
     font-weight: 900;
     color: #f97316;
   }
-
-  .sd-row-title {
+  .row-title {
     margin: 8px 0 0;
     font-size: 48px;
     line-height: 1.05;
     font-weight: 900;
     color: #0f172a;
   }
-
-  .sd-row-copy {
+  .row-copy {
     max-width: 520px;
     margin: 0;
     font-size: 17px;
     line-height: 1.7;
     color: #475569;
   }
-
-  .sd-info-card {
+  .info-card {
     margin-bottom: 30px;
     border-radius: 34px;
     padding: 24px;
     background: rgba(255,255,255,0.68);
     border: 1px solid rgba(255,255,255,0.72);
-    box-shadow: 0 28px 60px rgba(249, 115, 22, 0.08);
+    box-shadow: 0 28px 60px rgba(249,115,22,0.08);
     backdrop-filter: blur(12px);
   }
-
-  .sd-info-grid {
+  .info-grid {
     display: grid;
     grid-template-columns: 1.2fr 0.8fr;
     gap: 20px;
     align-items: center;
   }
-
-  .sd-dark-card {
+  .dark-card {
     border-radius: 28px;
     padding: 22px;
     background: #0f172a;
-    color: #ffffff;
+    color: #fff;
     box-shadow: 0 24px 48px rgba(15,23,42,0.18);
   }
-
-  .sd-dark-card h4,
-  .sd-info-card h3,
-  .sd-info-card p,
-  .sd-dark-card p,
-  .sd-dark-card li {
-    margin: 0;
-  }
-
-  .sd-dark-card h4,
-  .sd-info-card h3 {
-    font-weight: 900;
-  }
-
-  .sd-dark-list {
+  .dark-list {
     margin: 14px 0 0;
     padding-left: 18px;
     color: rgba(255,255,255,0.82);
@@ -529,42 +632,37 @@ const css = `
     line-height: 1.7;
   }
 
-  .sd-showcase {
+  .showcase {
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 24px;
     margin-bottom: 32px;
   }
-
-  .sd-card {
+  .card {
     border-radius: 34px;
     background: rgba(255,255,255,0.7);
     border: 1px solid rgba(255,255,255,0.74);
-    box-shadow: 0 30px 70px rgba(249, 115, 22, 0.08);
+    box-shadow: 0 30px 70px rgba(249,115,22,0.08);
     backdrop-filter: blur(12px);
     overflow: hidden;
+    animation: cardDrift 9s ease-in-out infinite;
   }
-
-  .sd-card-grid {
+  .card-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0,1fr));
   }
-
-  .sd-card-side {
+  .card-side {
     position: relative;
     min-height: 320px;
     padding: 30px;
   }
-
-  .sd-card-side-a {
+  .card-side-a {
     background: linear-gradient(180deg, rgba(125,211,252,0.35), rgba(254,249,195,0.8), rgba(253,230,138,0.9));
   }
-
-  .sd-card-side-b {
+  .card-side-b {
     background: linear-gradient(135deg, rgba(251,207,232,0.88), rgba(255,237,213,0.9), rgba(207,250,254,0.9));
   }
-
-  .sd-chip {
+  .chip {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -573,75 +671,68 @@ const css = `
     background: rgba(255,255,255,0.72);
     font-size: 12px;
     line-height: 1.1;
-    letter-spacing: 0.35em;
+    letter-spacing: .35em;
     text-transform: uppercase;
     font-weight: 900;
   }
-
-  .sd-chip-pink { color: #db2777; }
-  .sd-chip-cyan { color: #0891b2; }
-  .sd-chip-orange { color: #f97316; }
-
-  .sd-logo-panel {
+  .chip-pink { color: #db2777; }
+  .chip-cyan { color: #0891b2; }
+  .chip-orange { color: #f97316; }
+  .logo-panel {
     display: flex;
     justify-content: center;
     padding: 26px 0;
   }
-
-  .sd-logo-panel img {
+  .logo-panel img {
     max-width: 420px;
     filter: drop-shadow(0 16px 28px rgba(15,23,42,0.18));
+    animation: floatLogo 6.2s ease-in-out infinite;
   }
-
-  .sd-showcase-copy {
+  .showcase-copy {
     max-width: 520px;
     font-size: 15px;
     line-height: 1.8;
     color: #475569;
     font-weight: 700;
   }
-
-  .sd-tank-card-side {
-    padding: 24px;
-  }
-
-  .sd-tank-card-panel {
+  .tank-card-side { padding: 24px; }
+  .tank-card-panel {
     margin-top: 18px;
     padding: 22px;
     border-radius: 28px;
     background: linear-gradient(135deg, rgba(186,230,253,0.9), rgba(255,255,255,0.96), rgba(251,207,232,0.76));
   }
 
-  .sd-grid {
+  .grid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0,1fr));
     gap: 24px;
   }
-
-  .sd-product-card {
+  .product-card {
     overflow: hidden;
     border-radius: 30px;
     border: 1px solid rgba(255,255,255,0.76);
     background: rgba(255,255,255,0.72);
-    box-shadow: 0 24px 52px rgba(249, 115, 22, 0.08);
+    box-shadow: 0 24px 52px rgba(249,115,22,0.08);
     backdrop-filter: blur(12px);
+    animation: cardDrift 8.6s ease-in-out infinite;
   }
-
-  .sd-product-visual {
+  .product-card:nth-child(2) { animation-delay: .5s; }
+  .product-card:nth-child(3) { animation-delay: 1s; }
+  .product-card:nth-child(4) { animation-delay: 1.5s; }
+  .product-visual {
     position: relative;
     height: 288px;
     overflow: hidden;
   }
-
-  .sd-product-visual::after {
+  .product-visual::after {
     content: "";
     position: absolute;
     inset: 0;
     background: radial-gradient(circle at top, rgba(255,255,255,0.84), transparent 35%);
     pointer-events: none;
   }
-
-  .sd-product-accent {
+  .product-accent {
     position: absolute;
     right: 18px;
     top: 18px;
@@ -651,11 +742,10 @@ const css = `
     padding: 8px 12px;
     font-size: 11px;
     font-weight: 700;
-    letter-spacing: 0.24em;
+    letter-spacing: .24em;
     color: #334155;
   }
-
-  .sd-product-badge {
+  .product-badge {
     position: absolute;
     left: 18px;
     top: 18px;
@@ -663,14 +753,13 @@ const css = `
     border-radius: 999px;
     background: #0f172a;
     padding: 8px 12px;
-    color: #ffffff;
+    color: #fff;
     font-size: 11px;
     font-weight: 900;
-    letter-spacing: 0.22em;
+    letter-spacing: .22em;
     text-transform: uppercase;
   }
-
-  .sd-product-color {
+  .product-color {
     position: absolute;
     left: 18px;
     bottom: 18px;
@@ -683,53 +772,43 @@ const css = `
     font-weight: 700;
     backdrop-filter: blur(10px);
   }
-
-  .sd-product-body {
-    padding: 22px;
-  }
-
-  .sd-product-top {
+  .product-body { padding: 22px; }
+  .product-top {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     gap: 12px;
   }
-
-  .sd-product-type {
+  .product-type {
     font-size: 11px;
     line-height: 1.2;
-    letter-spacing: 0.35em;
+    letter-spacing: .35em;
     text-transform: uppercase;
     font-weight: 900;
     color: #f97316;
   }
-
-  .sd-product-name {
+  .product-name {
     margin: 10px 0 0;
     font-size: 24px;
     line-height: 1.15;
     font-weight: 900;
     color: #0f172a;
   }
-
-  .sd-price {
+  .price {
     border-radius: 999px;
     background: #0f172a;
     padding: 8px 12px;
-    color: #ffffff;
+    color: #fff;
     font-size: 14px;
     font-weight: 800;
   }
-
-  .sd-product-copy {
+  .product-copy {
     margin: 12px 0 0;
     font-size: 15px;
     line-height: 1.7;
     color: #64748b;
   }
-
-  .sd-card-btn,
-  .sd-email-btn {
+  .card-btn, .email-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -740,12 +819,11 @@ const css = `
     border-radius: 999px;
     border: 0;
     background: #0f172a;
-    color: #ffffff;
+    color: #fff;
     font-weight: 800;
     cursor: pointer;
   }
-
-  .sd-help-box {
+  .help-box {
     margin-top: 14px;
     border-radius: 20px;
     border: 1px dashed #cbd5e1;
@@ -755,29 +833,21 @@ const css = `
     line-height: 1.6;
     color: #64748b;
   }
+  .help-box strong { color: #334155; }
 
-  .sd-help-box strong {
-    color: #334155;
-  }
-
-  .sd-footer {
-    padding: 16px 0 90px;
-  }
-
-  .sd-footer-grid {
+  .footer { padding: 16px 0 90px; }
+  .footer-grid {
     display: grid;
     grid-template-columns: 1.1fr 0.9fr;
     gap: 24px;
   }
-
-  .sd-tag-list {
+  .tag-list {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
     margin-top: 24px;
   }
-
-  .sd-tag {
+  .tag {
     border-radius: 999px;
     border: 1px solid rgba(255,255,255,0.72);
     background: rgba(255,255,255,0.75);
@@ -786,16 +856,14 @@ const css = `
     font-size: 14px;
     font-weight: 700;
   }
-
-  .sd-email-card {
+  .email-card {
     border-radius: 34px;
     background: #0f172a;
     padding: 32px;
-    color: #ffffff;
+    color: #fff;
     box-shadow: 0 30px 68px rgba(15,23,42,0.18);
   }
-
-  .sd-email-input {
+  .email-input {
     width: 100%;
     height: 52px;
     margin-top: 20px;
@@ -803,388 +871,83 @@ const css = `
     border-radius: 18px;
     border: 1px solid rgba(255,255,255,0.16);
     background: rgba(255,255,255,0.08);
-    color: #ffffff;
+    color: #fff;
     outline: none;
   }
-
-  .sd-email-input::placeholder {
-    color: rgba(255,255,255,0.55);
-  }
-
-  .sd-email-btn {
-    background: #ffffff;
+  .email-input::placeholder { color: rgba(255,255,255,0.55); }
+  .email-btn {
+    background: #fff;
     color: #0f172a;
     margin-top: 12px;
   }
-
-  .sd-email-note {
+  .email-note {
     margin-top: 14px;
     font-size: 14px;
     line-height: 1.7;
     color: rgba(255,255,255,0.68);
   }
 
-  .sd-gradient-coral { background: linear-gradient(135deg, #fdba74 0%, #f472b6 55%, #fb7185 100%); }
-  .sd-gradient-aqua { background: linear-gradient(135deg, #67e8f9 0%, #38bdf8 55%, #3b82f6 100%); }
-  .sd-gradient-lime { background: linear-gradient(135deg, #bef264 0%, #34d399 55%, #22c55e 100%); }
-  .sd-gradient-cream { background: linear-gradient(135deg, #fde68a 0%, #fef3c7 55%, #fdba74 100%); }
-
-  .sd-panther {
-    position: absolute;
-    left: 6px;
-    top: 84px;
-    z-index: 3;
-    display: none;
-    width: 260px;
-    height: 260px;
-  }
-
-  .sd-panther-head,
-  .sd-panther-body,
-  .sd-panther-arm,
-  .sd-panther-leg,
-  .sd-panther-paw,
-  .sd-panther-tail,
-  .sd-panther-ear {
-    position: absolute;
-    background: #0f172a;
-  }
-
-  .sd-panther-head {
-    left: 98px;
-    top: 16px;
-    width: 92px;
-    height: 78px;
-    border-radius: 45px;
-    box-shadow: 0 18px 30px rgba(15,23,42,0.2);
-  }
-
-  .sd-panther-ear.left {
-    left: 88px;
-    top: 4px;
-    width: 28px;
-    height: 28px;
-    transform: rotate(-18deg);
-    border-radius: 18px 3px 10px 3px;
-  }
-
-  .sd-panther-ear.right {
-    left: 166px;
-    top: 6px;
-    width: 28px;
-    height: 28px;
-    transform: rotate(18deg);
-    border-radius: 3px 18px 3px 10px;
-  }
-
-  .sd-panther-eye {
-    position: absolute;
-    top: 42px;
-    width: 10px;
-    height: 10px;
-    border-radius: 999px;
-    background: #fbbf24;
-  }
-
-  .sd-panther-eye.left { left: 112px; }
-  .sd-panther-eye.right { left: 157px; }
-
-  .sd-panther-mouth {
-    position: absolute;
-    left: 128px;
-    top: 60px;
-    width: 30px;
-    height: 18px;
-    border-radius: 8px 8px 18px 18px;
-    background: rgba(255,255,255,0.92);
-  }
-
-  .sd-panther-body {
-    left: 80px;
-    top: 90px;
-    width: 132px;
-    height: 98px;
-    border-radius: 60px;
-    box-shadow: 0 18px 30px rgba(15,23,42,0.2);
-  }
-
-  .sd-panther-arm.left {
-    left: 48px;
-    top: 96px;
-    width: 30px;
-    height: 118px;
-    transform: rotate(18deg);
-    border-radius: 999px;
-  }
-
-  .sd-panther-arm.right {
-    left: 210px;
-    top: 96px;
-    width: 30px;
-    height: 118px;
-    transform: rotate(-18deg);
-    border-radius: 999px;
-  }
-
-  .sd-panther-paw.left {
-    left: 34px;
-    top: 178px;
-    width: 76px;
-    height: 16px;
-    border-radius: 999px;
-  }
-
-  .sd-panther-paw.right {
-    left: 180px;
-    top: 178px;
-    width: 76px;
-    height: 16px;
-    border-radius: 999px;
-  }
-
-  .sd-panther-leg.left {
-    left: 100px;
-    top: 208px;
-    width: 16px;
-    height: 42px;
-    border-radius: 999px;
-  }
-
-  .sd-panther-leg.right {
-    left: 158px;
-    top: 208px;
-    width: 16px;
-    height: 42px;
-    border-radius: 999px;
-  }
-
-  .sd-panther-tail.a {
-    left: 186px;
-    top: 144px;
-    width: 74px;
-    height: 12px;
-    transform: rotate(35deg);
-    border-radius: 999px;
-  }
-
-  .sd-panther-tail.b {
-    left: 198px;
-    top: 118px;
-    width: 48px;
-    height: 12px;
-    transform: rotate(65deg);
-    border-radius: 999px;
-  }
-
-  .sd-panther-bar {
-    position: absolute;
-    left: 92px;
-    top: 124px;
-    width: 1100px;
-    height: 16px;
-    border-radius: 999px;
-    background: rgba(255,255,255,0.56);
-    box-shadow: 0 8px 30px rgba(255,255,255,0.35);
-    backdrop-filter: blur(8px);
-  }
-
-  .sd-panther-bar-text {
-    position: absolute;
-    left: 94px;
-    top: 116px;
-    border-radius: 999px;
-    background: rgba(255,255,255,0.7);
-    padding: 10px 18px;
-    font-size: 14px;
-    line-height: 1;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    font-weight: 900;
-    color: #1e293b;
-    box-shadow: 0 14px 28px rgba(255,255,255,0.18);
-  }
-
-  
-  }
-
   @media (max-width: 1100px) {
-    .sd-hero,
-    .sd-info-grid,
-    .sd-showcase,
-    .sd-footer-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .sd-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .sd-row {
+    .hero, .info-grid, .showcase, .footer-grid { grid-template-columns: 1fr; }
+    .grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .row {
       flex-direction: column;
       align-items: flex-start;
     }
   }
-
   @media (max-width: 768px) {
-    .sd-shell {
-      width: min(100% - 24px, 100%);
-    }
-
-    .sd-hero {
-      padding-top: 56px;
-    }
-
-    .sd-title {
-      font-size: 46px;
-    }
-
-    .sd-body {
-      font-size: 18px;
-    }
-
-    .sd-stats,
-    .sd-grid,
-    .sd-featured-grid,
-    .sd-card-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .sd-showcase {
-      gap: 20px;
-    }
-
-    .sd-row-title,
-    .sd-picker-title {
-      font-size: 34px;
-    }
+    .container { width: min(100% - 24px, 100%); }
+    .hero { padding-top: 56px; }
+    .title { font-size: 46px; }
+    .body { font-size: 18px; }
+    .stats, .grid, .featured-grid, .card-grid { grid-template-columns: 1fr; }
+    .showcase { gap: 20px; }
+    .row-title, .picker-title { font-size: 34px; }
   }
 `;
 
-const hatColors = [
-  { name: "Sunset Coral", swatchClass: "sd-gradient-coral", accent: "Coral Heat" },
-  { name: "Ocean Aqua", swatchClass: "sd-gradient-aqua", accent: "Cool Splash" },
-  { name: "Palm Lime", swatchClass: "sd-gradient-lime", accent: "Fresh Energy" },
-  { name: "Sand Cream", swatchClass: "sd-gradient-cream", accent: "Soft Shore" },
-];
-
-const products = [
-  {
-    id: "suppa-duppa-beach-snapback",
-    name: "Suppa Duppa Beach Snapback",
-    type: "Hat",
-    vibe: "Easy, bright, all-day beach energy.",
-    price: "$34",
-    color: "Sunset Coral",
-    badge: "Best Seller",
-    shopifyUrl: "#",
-    buyButtonHtml: "",
-  },
-  {
-    id: "wave-runner-tank",
-    name: "Wave Runner Tank",
-    type: "Tank Top",
-    vibe: "Built for hot sand, cold drinks, and golden hour.",
-    price: "$29",
-    color: "Ocean Aqua",
-    badge: "New Drop",
-    shopifyUrl: "#",
-    buyButtonHtml: "",
-  },
-  {
-    id: "palm-drift-tank",
-    name: "Palm Drift Tank",
-    type: "Tank Top",
-    vibe: "Lightweight summer feel with playful color pop.",
-    price: "$29",
-    color: "Palm Lime",
-    badge: "Summer Pick",
-    shopifyUrl: "#",
-    buyButtonHtml: "",
-  },
-  {
-    id: "shoreline-snapback",
-    name: "Shoreline Snapback",
-    type: "Hat",
-    vibe: "Clean neutral look for beach walks and sunset fits.",
-    price: "$34",
-    color: "Sand Cream",
-    badge: "Fresh Color",
-    shopifyUrl: "#",
-    buyButtonHtml: "",
-  },
-];
-
 function HatMock() {
   return (
-    <div className="sd-hat">
-      <div className="sd-hat-crown" />
-      <div className="sd-hat-brim" />
-      <div className="sd-hat-logo">
-        <img src={logoSrc} alt="Suppa Duppa logo" />
-      </div>
+    <div className="hat">
+      <div className="hat-crown" />
+      <div className="hat-brim" />
+      <div className="hat-logo"><img src={logoSrc} alt="Suppa Duppa logo" /></div>
     </div>
   );
 }
 
 function TankMock() {
   return (
-    <div className="sd-tank">
-      <div className="sd-tank-neck" />
-      <div className="sd-tank-logo">
-        <img src={logoSrc} alt="Suppa Duppa logo" />
-      </div>
+    <div className="tank">
+      <div className="tank-neck" />
+      <div className="tank-logo"><img src={logoSrc} alt="Suppa Duppa logo" /></div>
     </div>
   );
 }
 
 function ShopifyEmbedCard({ product, selected }) {
-  const embedRef = useRef(null);
   const isHat = product.type === "Hat";
-  const hasEmbed = Boolean(product.buyButtonHtml && product.buyButtonHtml.trim());
-
-  useEffect(() => {
-    if (!embedRef.current) return;
-    embedRef.current.innerHTML = "";
-
-    if (hasEmbed) {
-      embedRef.current.innerHTML = product.buyButtonHtml;
-    }
-  }, [hasEmbed, product.buyButtonHtml]);
-
   return (
-    <div className="sd-product-card">
-      <div className={`sd-product-visual ${selected.swatchClass}`}>
-        <div className="sd-product-accent">{selected.accent}</div>
-        {product.badge ? <div className="sd-product-badge">{product.badge}</div> : null}
+    <div className="product-card">
+      <div className="product-visual" style={{ backgroundImage: selected.panel }}>
+        <div className="product-accent">{selected.accent}</div>
+        <div className="product-badge">{product.badge}</div>
         <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
           {isHat ? <HatMock /> : <TankMock />}
         </div>
-        <div className="sd-product-color">{product.color}</div>
+        <div className="product-color">{selected.name}</div>
       </div>
-
-      <div className="sd-product-body">
-        <div className="sd-product-top">
+      <div className="product-body">
+        <div className="product-top">
           <div>
-            <div className="sd-product-type">{product.type}</div>
-            <h3 className="sd-product-name">{product.name}</h3>
+            <div className="product-type">{product.type}</div>
+            <h3 className="product-name">{product.name}</h3>
           </div>
-          <div className="sd-price">{product.price}</div>
+          <div className="price">{product.price}</div>
         </div>
-
-        <p className="sd-product-copy">{product.vibe}</p>
-
-        {hasEmbed ? (
-          <div ref={embedRef} style={{ minHeight: 56, marginTop: 14 }} />
-        ) : (
-          <>
-            <a className="sd-card-btn" href={product.shopifyUrl || "#"} target="_blank" rel="noreferrer">
-              Shop on Shopify
-            </a>
-            <div className="sd-help-box">
-              Paste your Shopify Buy Button embed code into <strong>buyButtonHtml</strong>, or add your Shopify product link to <strong>shopifyUrl</strong>.
-            </div>
-          </>
-        )}
+        <p className="product-copy">{product.vibe}</p>
+        <a className="card-btn" href="#">Shop on Shopify</a>
+        <div className="help-box">Paste your Shopify Buy Button embed code into <strong>buyButtonHtml</strong>, or add your Shopify product link to <strong>shopifyUrl</strong>.</div>
       </div>
     </div>
   );
@@ -1192,224 +955,135 @@ function ShopifyEmbedCard({ product, selected }) {
 
 function MockupShowcase() {
   return (
-    <div className="sd-showcase">
-      <div className="sd-card">
-        <div className="sd-card-grid">
-          <div className="sd-card-side sd-card-side-a">
-            <div className="sd-chip sd-chip-pink">Hero logo preview</div>
-            <div className="sd-logo-panel">
-              <img src={logoSrc} alt="Suppa Duppa logo" />
-            </div>
-            <p className="sd-showcase-copy">
-              This shows how the real Suppa Duppa logo hits on the homepage with a sunny beach backdrop and playful summer energy.
-            </p>
+    <div className="showcase">
+      <div className="card">
+        <div className="card-grid">
+          <div className="card-side card-side-a">
+            <div className="chip chip-pink">Hero logo preview</div>
+            <div className="logo-panel"><img src={logoSrc} alt="Suppa Duppa logo" /></div>
+            <p className="showcase-copy">This shows how the Suppa Duppa logo lands on the homepage with a sunny beach backdrop and smoother summer energy.</p>
           </div>
-
-          <div className="sd-card-side sd-card-side-b">
-            <div className="sd-chip sd-chip-cyan">Lifestyle mockup</div>
-            <div style={{ display: "flex", justifyContent: "center", padding: "24px 0" }}>
-              <HatMock />
-            </div>
+          <div className="card-side card-side-b">
+            <div className="chip chip-cyan">Lifestyle mockup</div>
+            <div style={{ display: "flex", justifyContent: "center", padding: "24px 0" }}><HatMock /></div>
             <div style={{ marginTop: 24, borderRadius: 24, background: "rgba(255,255,255,0.68)", padding: 16 }}>
               <div style={{ fontSize: 18, fontWeight: 900, color: "#0f172a" }}>Suppa Duppa Snapback</div>
-              <p style={{ margin: "8px 0 0", fontSize: 14, lineHeight: 1.65, color: "#475569" }}>
-                Quick mockup preview for how the logo can sit on hats inside the store before product photos are added.
-              </p>
+              <p style={{ margin: "8px 0 0", fontSize: 14, lineHeight: 1.65, color: "#475569" }}>Quick mockup preview for how the logo can sit on hats inside the store before product photos are added.</p>
             </div>
           </div>
         </div>
       </div>
-
-      <div className="sd-card sd-tank-card-side">
-        <div className="sd-chip sd-chip-orange">Tank mockup</div>
-        <div className="sd-tank-card-panel">
-          <TankMock />
-        </div>
-        <p style={{ margin: "18px 0 0", fontSize: 14, lineHeight: 1.75, color: "#475569" }}>
-          Preview of the logo placed on a tank top product card for the summer collection section.
-        </p>
+      <div className="card tank-card-side">
+        <div className="chip chip-orange">Tank mockup</div>
+        <div className="tank-card-panel"><TankMock /></div>
+        <p style={{ margin: "18px 0 0", fontSize: 14, lineHeight: 1.75, color: "#475569" }}>Preview of the logo placed on a tank top product card for the summer collection section.</p>
       </div>
     </div>
   );
 }
 
-function PantherBanner() {
-  return (
-    <div className="sd-panther" aria-hidden="true">
-      <div className="sd-panther-head" />
-      <div className="sd-panther-ear left" />
-      <div className="sd-panther-ear right" />
-      <div className="sd-panther-eye left" />
-      <div className="sd-panther-eye right" />
-      <div className="sd-panther-mouth" />
-      <div className="sd-panther-body" />
-      <div className="sd-panther-arm left" />
-      <div className="sd-panther-arm right" />
-      <div className="sd-panther-paw left" />
-      <div className="sd-panther-paw right" />
-      <div className="sd-panther-leg left" />
-      <div className="sd-panther-leg right" />
-      <div className="sd-panther-tail a" />
-      <div className="sd-panther-tail b" />
-      <div className="sd-panther-bar" />
-      <div className="sd-panther-bar-text">How You Feelin'?</div>
-    </div>
-  );
-}
-
-export default function SuppaDuppaSummerSite() {
+export default function App() {
   const [activeColor, setActiveColor] = useState(hatColors[0].name);
-
-  const selected = useMemo(
-    () => hatColors.find((color) => color.name === activeColor) || hatColors[0],
-    [activeColor]
-  );
+  const selected = useMemo(() => hatColors.find((c) => c.name === activeColor) || hatColors[0], [activeColor]);
 
   return (
     <>
       <style>{css}</style>
-      <div className="sd-site">
-        <section className="sd-section">
-          <div className="sd-overlay" />
-          <div className="sd-blur-a" />
-          <div className="sd-blur-b" />
-          
+      <div
+        className="site"
+        style={{
+          "--siteGradient": selected.gradient,
+          "--glowA": selected.glowA,
+          "--glowB": selected.glowB,
+        }}
+      >
+        <div className="ambient one" />
+        <div className="ambient two" />
+        <div className="ambient three" />
+        <div className="overlay" />
 
-          <div className="sd-shell">
-            <div className="sd-hero">
-              <div>
-                <div className="sd-pill">
-                  <span className="sd-spark" />
-                  Summer drop is live
-                </div>
-
-                <div className="sd-logo-frame">
-                  <img src={logoSrc} alt="Suppa Duppa" className="sd-logo-main" />
-                </div>
-
-                <p className="sd-kicker">How You Feelin'? Suppa Duppa.</p>
-
-                <p style={{ margin: "0 0 10px", maxWidth: 620, fontSize: 15, lineHeight: 1.7, color: "#64748b", fontWeight: 700 }}>
-                  Bright logo. Clean layout. Soft beach energy. A smoother first look that feels easy to shop.
-                </p>
-
-                <h1 className="sd-title">
-                  Beach-ready hats and tanks with pure <span className="sd-title-gradient">summer mood</span>.
-                </h1>
-
-                <p className="sd-body">
-                  Suppa Duppa feels like walking barefoot on warm sand, catching ocean breeze, and pulling up in bright colors that make the whole day feel lighter.
-                </p>
-
-                <p className="sd-body-sub">
-                  Soft ocean breeze, clean color, smooth summer energy, and a fresh feel that fits the whole mood right.
-                </p>
-
-                <div className="sd-actions">
-                  <a href="#shopify-products" className="sd-btn">
-                    <span>🛍️</span>
-                    <span>Shop the collection</span>
-                  </a>
-                  <a href="#shopify-products" className="sd-btn-outline">
-                    <span>🌊</span>
-                    <span>View summer colors</span>
-                  </a>
-                </div>
-
-                <div className="sd-stats">
-                  <div className="sd-stat">
-                    <div className="sd-stat-number">4</div>
-                    <div className="sd-stat-label">Colorways ready</div>
-                  </div>
-                  <div className="sd-stat">
-                    <div className="sd-stat-number">2</div>
-                    <div className="sd-stat-label">Summer staples</div>
-                  </div>
-                  <div className="sd-stat">
-                    <div className="sd-stat-number">100%</div>
-                    <div className="sd-stat-label">Beach vibe energy</div>
-                  </div>
-                </div>
+        <div className="container">
+          <section className="hero">
+            <div>
+              <div className="pill"><span className="spark" />Summer drop is live</div>
+              <div className="logo-frame"><img src={logoSrc} alt="Suppa Duppa" className="logo-main" /></div>
+              <p className="kicker">How You Feelin'? Suppa Duppa.</p>
+              <p className="mini-copy">Bright logo. Clean layout. Soft beach energy. A smoother first look that feels easy to shop.</p>
+              <h1 className="title">Beach-ready hats and tanks with pure <span className="gradient-text">summer mood</span>.</h1>
+              <p className="body">Suppa Duppa feels like walking barefoot on warm sand, catching ocean breeze, and pulling up in bright colors that make the whole day feel lighter.</p>
+              <p className="body-sub">Soft ocean breeze, clean color, smooth summer energy, and a fresh feel that fits the whole mood right.</p>
+              <div className="actions">
+                <a href="#shopify-products" className="btn"><span>🛍️</span><span>Shop the collection</span></a>
+                <a href="#shopify-products" className="btn-outline"><span>🌊</span><span>View summer colors</span></a>
               </div>
+              <div className="stats">
+                <div className="stat"><div className="stat-number">4</div><div className="stat-label">Colorways ready</div></div>
+                <div className="stat"><div className="stat-number">2</div><div className="stat-label">Summer staples</div></div>
+                <div className="stat"><div className="stat-number">100%</div><div className="stat-label">Beach vibe energy</div></div>
+              </div>
+            </div>
 
-              <div className="sd-picker-wrap">
-                <div className="sd-picker-blur" />
-                <div className="sd-picker">
-                  <div className="sd-picker-top">
-                    <div>
-                      <div className="sd-picker-label">Color picker</div>
-                      <h2 className="sd-picker-title">Choose your beach tone</h2>
-                    </div>
-                    <div className="sd-sun">☀️</div>
+            <div className="picker-wrap">
+              <div className="picker-blur" />
+              <div className="picker">
+                <div className="picker-top">
+                  <div>
+                    <div className="picker-label">Color picker</div>
+                    <h2 className="picker-title">Choose your beach tone</h2>
                   </div>
-
-                  <div className="sd-color-list">
-                    {hatColors.map((color) => (
-                      <button
-                        key={color.name}
-                        type="button"
-                        onClick={() => setActiveColor(color.name)}
-                        className={`sd-color-btn ${activeColor === color.name ? "is-active" : ""}`}
-                      >
-                        {color.name}
-                      </button>
-                    ))}
-                  </div>
-
-                  <div className={`sd-featured ${selected.swatchClass}`}>
-                    <div className="sd-featured-card">
-                      <div className="sd-featured-label">Featured look</div>
-                      <div className="sd-featured-grid">
-                        <div className="sd-product-mini">
-                          <div className="sd-product-mini-logo">
-                            <HatMock />
-                          </div>
-                          <div className="sd-product-mini-title">Hat</div>
-                        </div>
-                        <div className="sd-product-mini">
-                          <div className="sd-product-mini-logo">
-                            <TankMock />
-                          </div>
-                          <div className="sd-product-mini-title">Tank</div>
-                        </div>
+                  <div className="sun">☀️</div>
+                </div>
+                <div className="color-list">
+                  {hatColors.map((color) => (
+                    <button
+                      key={color.name}
+                      type="button"
+                      className={`color-btn ${activeColor === color.name ? "active" : ""}`}
+                      onClick={() => setActiveColor(color.name)}
+                    >
+                      {color.name}
+                    </button>
+                  ))}
+                </div>
+                <div className="featured" style={{ backgroundImage: selected.panel }}>
+                  <div className="featured-card">
+                    <div className="featured-label">Featured look</div>
+                    <div className="featured-grid">
+                      <div className="product-mini">
+                        <div className="product-mini-logo"><HatMock /></div>
+                        <div className="product-mini-title">Hat</div>
                       </div>
-                      <p className="sd-featured-copy">
-                        {selected.name} makes the whole fit feel fresh, playful, and made for the shoreline.
-                      </p>
+                      <div className="product-mini">
+                        <div className="product-mini-logo"><TankMock /></div>
+                        <div className="product-mini-title">Tank</div>
+                      </div>
                     </div>
+                    <p className="featured-copy">{selected.name} makes the whole fit feel fresh, playful, and made for the shoreline.</p>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <section id="shopify-products" className="sd-shopify">
-          <div className="sd-shell">
-            <div className="sd-row">
+          <section id="shopify-products" className="shopify">
+            <div className="row">
               <div>
-                <div className="sd-row-kicker">Summer collection</div>
-                <h2 className="sd-row-title">Different color hats and tank tops</h2>
+                <div className="row-kicker">Summer collection</div>
+                <h2 className="row-title">Different color hats and tank tops</h2>
               </div>
-              <p className="sd-row-copy">
-                A bright mix of clean neutrals, ocean blues, tropical greens, and sunset tones so every piece feels like vacation mode.
-              </p>
+              <p className="row-copy">A bright mix of clean neutrals, ocean blues, tropical greens, and sunset tones so every piece feels like vacation mode.</p>
             </div>
 
-            <div className="sd-info-card">
-              <div className="sd-info-grid">
+            <div className="info-card">
+              <div className="info-grid">
                 <div>
-                  <div className="sd-row-kicker" style={{ color: "#0891b2" }}>Shopify-ready section</div>
-                  <h3 style={{ margin: "10px 0 0", fontSize: 34, lineHeight: 1.1, color: "#0f172a" }}>
-                    Drop your Shopify products right into this layout.
-                  </h3>
-                  <p style={{ margin: "14px 0 0", maxWidth: 720, fontSize: 16, lineHeight: 1.8, color: "#64748b" }}>
-                    Each product card below can take either a Shopify product link or a full Shopify Buy Button embed. Keep the same Suppa Duppa design, and swap the mock cards for live products whenever you are ready.
-                  </p>
+                  <div className="row-kicker" style={{ color: "#0891b2" }}>Shopify-ready section</div>
+                  <h3 style={{ margin: "10px 0 0", fontSize: 34, lineHeight: 1.1, color: "#0f172a" }}>Drop your Shopify products right into this layout.</h3>
+                  <p style={{ margin: "14px 0 0", maxWidth: 720, fontSize: 16, lineHeight: 1.8, color: "#64748b" }}>Each product card below can take either a Shopify product link or a full Shopify Buy Button embed. Keep the same Suppa Duppa design, and swap the mock cards for live products whenever you are ready.</p>
                 </div>
-                <div className="sd-dark-card">
-                  <div className="sd-row-kicker" style={{ color: "#67e8f9" }}>How to use it</div>
-                  <ol className="sd-dark-list">
+                <div className="dark-card">
+                  <div className="row-kicker" style={{ color: "#67e8f9" }}>How to use it</div>
+                  <ol className="dark-list">
                     <li>Add your Shopify product URL in each card.</li>
                     <li>Or paste the Shopify Buy Button embed code into the product object.</li>
                     <li>Replace the sample products with your real Printful-synced Shopify items.</li>
@@ -1420,44 +1094,35 @@ export default function SuppaDuppaSummerSite() {
 
             <MockupShowcase />
 
-            <div className="sd-grid">
-              {products.map((item) => (
-                <ShopifyEmbedCard key={item.id} product={item} selected={selected} />
+            <div className="grid">
+              {products.map((product) => (
+                <ShopifyEmbedCard key={product.id} product={product} selected={selected} />
               ))}
             </div>
-          </div>
-        </section>
+          </section>
 
-        <section className="sd-footer">
-          <div className="sd-shell">
-            <div className="sd-footer-grid">
-              <div className="sd-card" style={{ padding: 32 }}>
-                <div className="sd-row-kicker" style={{ color: "#0891b2" }}>Store mood</div>
-                <h3 style={{ margin: "10px 0 0", fontSize: 48, lineHeight: 1.05, color: "#0f172a" }}>
-                  Walk the sand. Catch the light. Wear the feeling.
-                </h3>
-                <p style={{ margin: "18px 0 0", maxWidth: 760, fontSize: 20, lineHeight: 1.8, color: "#475569" }}>
-                  The whole site is built around a beach-day feeling — airy space, sun-washed colors, playful energy, and product cards that feel easy to shop on phone or desktop.
-                </p>
-                <div className="sd-tag-list">
+          <section className="footer">
+            <div className="footer-grid">
+              <div className="card" style={{ padding: 32 }}>
+                <div className="row-kicker" style={{ color: "#0891b2" }}>Store mood</div>
+                <h3 style={{ margin: "10px 0 0", fontSize: 48, lineHeight: 1.05, color: "#0f172a" }}>Walk the sand. Catch the light. Wear the feeling.</h3>
+                <p style={{ margin: "18px 0 0", maxWidth: 760, fontSize: 20, lineHeight: 1.8, color: "#475569" }}>The whole site is built around a beach-day feeling — airy space, sun-washed colors, playful energy, and product cards that feel easy to shop on phone or desktop.</p>
+                <div className="tag-list">
                   {["Beach launch banner", "Color-ready product grid", "Mobile-friendly layout", "Shopify-ready product cards"].map((tag) => (
-                    <span key={tag} className="sd-tag">{tag}</span>
+                    <span key={tag} className="tag">{tag}</span>
                   ))}
                 </div>
               </div>
-
-              <div className="sd-email-card">
-                <div className="sd-row-kicker" style={{ color: "#67e8f9" }}>Email sign-up</div>
-                <h3 style={{ margin: "10px 0 0", fontSize: 38, lineHeight: 1.1, color: "#ffffff" }}>
-                  Get first access to new colors and beach drops.
-                </h3>
-                <input className="sd-email-input" placeholder="Email address" />
-                <button type="button" className="sd-email-btn">Join the Suppa Duppa list</button>
-                <p className="sd-email-note">Bright fits, summer drops, and fresh beach energy straight to your inbox.</p>
+              <div className="email-card">
+                <div className="row-kicker" style={{ color: "#67e8f9" }}>Email sign-up</div>
+                <h3 style={{ margin: "10px 0 0", fontSize: 38, lineHeight: 1.1, color: "#fff" }}>Get first access to new colors and beach drops.</h3>
+                <input className="email-input" placeholder="Email address" />
+                <button type="button" className="email-btn">Join the Suppa Duppa list</button>
+                <p className="email-note">Bright fits, summer drops, and fresh beach energy straight to your inbox.</p>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </div>
       </div>
     </>
   );
