@@ -71,8 +71,6 @@ const products = [
   },
 ];
 
-
-
 const css = `
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
@@ -201,11 +199,20 @@ const css = `
     background: #f97316;
     box-shadow: 0 0 18px rgba(249,115,22,.5);
   }
+  .logo-scene {
+    position: relative;
+    display: inline-flex;
+    align-items: flex-end;
+    justify-content: center;
+    margin: 18px 0 14px;
+    padding: 8px 68px 0;
+  }
   .logo-frame {
+    position: relative;
+    z-index: 2;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    margin: 18px 0 14px;
     padding: 18px 20px;
     border-radius: 28px;
     background: rgba(255,255,255,0.82);
@@ -219,6 +226,60 @@ const css = `
     filter: drop-shadow(0 18px 28px rgba(0,0,0,0.12));
     animation: floatLogo 5.6s ease-in-out infinite;
   }
+  .palm {
+    position: absolute;
+    top: -26px;
+    width: 128px;
+    height: 190px;
+    z-index: 1;
+    pointer-events: none;
+  }
+  .palm.left {
+    left: 0;
+    transform: scaleX(-1) rotate(-7deg);
+  }
+  .palm.right {
+    right: 0;
+    transform: rotate(7deg);
+  }
+  .palm-trunk {
+    position: absolute;
+    left: 50%;
+    bottom: 8px;
+    width: 16px;
+    height: 96px;
+    transform: translateX(-50%) skew(-8deg);
+    border-radius: 16px;
+    background: linear-gradient(180deg, #b07a48 0%, #8b5a2b 100%);
+    box-shadow: 0 10px 22px rgba(139, 90, 43, 0.18);
+  }
+  .palm-leaf {
+    position: absolute;
+    left: 50%;
+    bottom: 94px;
+    width: 86px;
+    height: 22px;
+    transform-origin: 12px 50%;
+    border-radius: 24px 30px 12px 28px;
+    background: linear-gradient(90deg, #4ade80 0%, #22c55e 48%, #15803d 100%);
+    box-shadow: 0 8px 18px rgba(34, 197, 94, 0.22);
+  }
+  .palm-leaf.l1 { transform: translateX(-12px) rotate(-68deg); }
+  .palm-leaf.l2 { transform: translateX(-10px) rotate(-36deg); }
+  .palm-leaf.l3 { transform: translateX(-8px) rotate(-8deg); }
+  .palm-leaf.l4 { transform: translateX(-10px) rotate(22deg); }
+  .palm-leaf.l5 { transform: translateX(-12px) rotate(52deg); }
+  .palm-dot {
+    position: absolute;
+    top: 28px;
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    background: #f59e0b;
+    box-shadow: 0 0 18px rgba(245, 158, 11, 0.4);
+  }
+  .palm.left .palm-dot { right: 8px; }
+  .palm.right .palm-dot { left: 8px; }
   .kicker {
     margin: 0 0 18px;
     font-size: 18px;
@@ -855,6 +916,17 @@ const css = `
     .stats, .grid, .featured-grid, .card-grid { grid-template-columns: 1fr; }
     .showcase { gap: 20px; }
     .row-title, .picker-title { font-size: 34px; }
+    .logo-scene {
+      padding: 0 24px;
+    }
+    .logo-main {
+      width: 260px;
+    }
+    .palm {
+      top: -12px;
+      width: 88px;
+      height: 144px;
+    }
   }
 `;
 
@@ -873,6 +945,20 @@ function TankMock() {
     <div className="tank">
       <div className="tank-neck" />
       <div className="tank-logo"><img src={logoSrc} alt="Suppa Duppa logo" /></div>
+    </div>
+  );
+}
+
+function PalmAccent({ side }) {
+  return (
+    <div className={`palm ${side}`} aria-hidden="true">
+      <div className="palm-dot" />
+      <div className="palm-leaf l1" />
+      <div className="palm-leaf l2" />
+      <div className="palm-leaf l3" />
+      <div className="palm-leaf l4" />
+      <div className="palm-leaf l5" />
+      <div className="palm-trunk" />
     </div>
   );
 }
@@ -934,9 +1020,6 @@ function MockupShowcase() {
   );
 }
 
-// For GitHub/Vercel, swap the two lines above with:
-// import logoSrc from "./suppa-duppa-logo.png";
-
 export default function App() {
   const [activeColor, setActiveColor] = useState(hatColors[0].name);
   const selected = useMemo(() => hatColors.find((c) => c.name === activeColor) || hatColors[0], [activeColor]);
@@ -961,9 +1044,13 @@ export default function App() {
           <section className="hero">
             <div>
               <div className="pill"><span className="spark" />Summer drop is live</div>
-              <div className="logo-frame"><img src={logoSrc} alt="Suppa Duppa" className="logo-main" /></div>
+              <div className="logo-scene">
+                <PalmAccent side="left" />
+                <div className="logo-frame"><img src={logoSrc} alt="Suppa Duppa" className="logo-main" /></div>
+                <PalmAccent side="right" />
+              </div>
               <p className="kicker">How You Feelin'? Suppa Duppa.</p>
-              <p className="mini-copy">Bright logo. Clean layout. Soft beach energy. A smoother first look that feels easy to shop.</p>
+              <p className="mini-copy">Bright logo. Palm trees. Clean layout. Soft beach energy. A smoother first look that feels easy to shop.</p>
               <h1 className="title">Beach-ready hats and tanks with pure <span className="gradient-text">summer mood</span>.</h1>
               <p className="body">Suppa Duppa feels like walking barefoot on warm sand, catching ocean breeze, and pulling up in bright colors that make the whole day feel lighter.</p>
               <p className="body-sub">Soft ocean breeze, clean color, smooth summer energy, and a fresh feel that fits the whole mood right.</p>
