@@ -202,10 +202,10 @@ const css = `
   .logo-scene {
     position: relative;
     display: inline-flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: center;
     margin: 20px 0 16px;
-    padding: 8px 78px 4px;
+    padding: 0;
   }
   .logo-frame {
     position: relative;
@@ -220,113 +220,12 @@ const css = `
     backdrop-filter: none;
   }
   .logo-main {
-    width: 340px;
+    width: 390px;
     max-width: 100%;
     filter: drop-shadow(0 20px 30px rgba(0,0,0,0.12)) drop-shadow(0 8px 14px rgba(255,255,255,0.18));
     animation: floatLogo 5.6s ease-in-out infinite;
   }
-  .palm {
-    position: absolute;
-    top: -30px;
-    width: 150px;
-    height: 210px;
-    z-index: 1;
-    pointer-events: none;
-  }
-  .palm.left {
-    left: -2px;
-    transform: scaleX(-1) rotate(-8deg);
-  }
-  .palm.right {
-    right: -2px;
-    transform: rotate(8deg);
-  }
-  .palm-shadow {
-    position: absolute;
-    left: 50%;
-    bottom: 0;
-    width: 70px;
-    height: 16px;
-    transform: translateX(-50%);
-    border-radius: 999px;
-    background: rgba(15, 23, 42, 0.08);
-    filter: blur(6px);
-  }
-  .palm-trunk {
-    position: absolute;
-    left: 50%;
-    bottom: 12px;
-    width: 18px;
-    height: 108px;
-    transform: translateX(-50%) skew(-9deg);
-    border-radius: 16px;
-    background: linear-gradient(180deg, #c58a52 0%, #9a6536 38%, #7a4b24 100%);
-    box-shadow: inset 0 0 0 1px rgba(85, 44, 20, 0.12), 0 14px 24px rgba(122, 75, 36, 0.18);
-    overflow: hidden;
-  }
-  .palm-trunk::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: repeating-linear-gradient(
-      to bottom,
-      rgba(255,255,255,0.12) 0,
-      rgba(255,255,255,0.12) 3px,
-      transparent 3px,
-      transparent 17px
-    );
-    opacity: 0.55;
-  }
-  .palm-coconut {
-    position: absolute;
-    top: 74px;
-    width: 14px;
-    height: 14px;
-    border-radius: 999px;
-    background: radial-gradient(circle at 30% 30%, #7a4b24 0%, #5b3418 72%, #3d220f 100%);
-    box-shadow: 0 4px 10px rgba(61, 34, 15, 0.18);
-  }
-  .palm-coconut.c1 { left: 60px; }
-  .palm-coconut.c2 { left: 74px; top: 78px; }
-  .palm-coconut.c3 { left: 87px; top: 72px; }
-  .palm-leaf {
-    position: absolute;
-    left: 50%;
-    top: 34px;
-    width: 104px;
-    height: 24px;
-    transform-origin: 10px 50%;
-    border-radius: 30px 36px 18px 34px;
-    background: linear-gradient(90deg, #86efac 0%, #22c55e 44%, #15803d 100%);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.28), 0 10px 18px rgba(34, 197, 94, 0.18);
-  }
-  .palm-leaf::after {
-    content: "";
-    position: absolute;
-    left: 12px;
-    right: 8px;
-    top: 50%;
-    height: 1px;
-    background: rgba(255,255,255,0.34);
-    transform: translateY(-50%);
-  }
-  .palm-leaf.l1 { transform: translateX(-18px) rotate(-76deg) scale(1.02); }
-  .palm-leaf.l2 { transform: translateX(-16px) rotate(-48deg) scale(1.04); }
-  .palm-leaf.l3 { transform: translateX(-12px) rotate(-18deg); }
-  .palm-leaf.l4 { transform: translateX(-8px) rotate(12deg) scale(1.02); }
-  .palm-leaf.l5 { transform: translateX(-10px) rotate(42deg) scale(1.01); }
-  .palm-leaf.l6 { transform: translateX(-16px) rotate(68deg) scale(0.98); }
-  .palm-dot {
-    position: absolute;
-    top: 26px;
-    width: 10px;
-    height: 10px;
-    border-radius: 999px;
-    background: #f59e0b;
-    box-shadow: 0 0 18px rgba(245, 158, 11, 0.4);
-  }
-  .palm.left .palm-dot { right: 10px; }
-  .palm.right .palm-dot { left: 10px; }
+  
   .kicker {
     margin: 0 0 18px;
     font-size: 18px;
@@ -996,24 +895,7 @@ function TankMock() {
   );
 }
 
-function PalmAccent({ side }) {
-  return (
-    <div className={`palm ${side}`} aria-hidden="true">
-      <div className="palm-dot" />
-      <div className="palm-leaf l1" />
-      <div className="palm-leaf l2" />
-      <div className="palm-leaf l3" />
-      <div className="palm-leaf l4" />
-      <div className="palm-leaf l5" />
-      <div className="palm-leaf l6" />
-      <div className="palm-coconut c1" />
-      <div className="palm-coconut c2" />
-      <div className="palm-coconut c3" />
-      <div className="palm-trunk" />
-      <div className="palm-shadow" />
-    </div>
-  );
-}
+
 
 function ShopifyEmbedCard({ product, selected }) {
   const isHat = product.type === "Hat";
@@ -1097,9 +979,7 @@ export default function App() {
             <div>
               <div className="pill"><span className="spark" />Summer drop is live</div>
               <div className="logo-scene">
-                <PalmAccent side="left" />
                 <div className="logo-frame"><img src={logoSrc} alt="Suppa Duppa" className="logo-main" /></div>
-                <PalmAccent side="right" />
               </div>
               <p className="kicker">How You Feelin'? Suppa Duppa.</p>
               <p className="mini-copy">Bright logo. Palm trees. Clean layout. Soft beach energy. A smoother first look that feels easy to shop.</p>
