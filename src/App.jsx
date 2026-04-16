@@ -204,8 +204,8 @@ const css = `
     display: inline-flex;
     align-items: flex-end;
     justify-content: center;
-    margin: 18px 0 14px;
-    padding: 8px 68px 0;
+    margin: 20px 0 16px;
+    padding: 8px 78px 4px;
   }
   .logo-frame {
     position: relative;
@@ -213,73 +213,120 @@ const css = `
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 18px 20px;
-    border-radius: 28px;
-    background: rgba(255,255,255,0.82);
-    border: 1px solid rgba(255,255,255,0.72);
-    box-shadow: 0 20px 44px rgba(15,23,42,0.08);
-    backdrop-filter: blur(12px);
+    padding: 0;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    backdrop-filter: none;
   }
   .logo-main {
-    width: 320px;
+    width: 340px;
     max-width: 100%;
-    filter: drop-shadow(0 18px 28px rgba(0,0,0,0.12));
+    filter: drop-shadow(0 20px 30px rgba(0,0,0,0.12)) drop-shadow(0 8px 14px rgba(255,255,255,0.18));
     animation: floatLogo 5.6s ease-in-out infinite;
   }
   .palm {
     position: absolute;
-    top: -26px;
-    width: 128px;
-    height: 190px;
+    top: -30px;
+    width: 150px;
+    height: 210px;
     z-index: 1;
     pointer-events: none;
   }
   .palm.left {
-    left: 0;
-    transform: scaleX(-1) rotate(-7deg);
+    left: -2px;
+    transform: scaleX(-1) rotate(-8deg);
   }
   .palm.right {
-    right: 0;
-    transform: rotate(7deg);
+    right: -2px;
+    transform: rotate(8deg);
+  }
+  .palm-shadow {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 70px;
+    height: 16px;
+    transform: translateX(-50%);
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.08);
+    filter: blur(6px);
   }
   .palm-trunk {
     position: absolute;
     left: 50%;
-    bottom: 8px;
-    width: 16px;
-    height: 96px;
-    transform: translateX(-50%) skew(-8deg);
+    bottom: 12px;
+    width: 18px;
+    height: 108px;
+    transform: translateX(-50%) skew(-9deg);
     border-radius: 16px;
-    background: linear-gradient(180deg, #b07a48 0%, #8b5a2b 100%);
-    box-shadow: 0 10px 22px rgba(139, 90, 43, 0.18);
+    background: linear-gradient(180deg, #c58a52 0%, #9a6536 38%, #7a4b24 100%);
+    box-shadow: inset 0 0 0 1px rgba(85, 44, 20, 0.12), 0 14px 24px rgba(122, 75, 36, 0.18);
+    overflow: hidden;
   }
+  .palm-trunk::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,0.12) 0,
+      rgba(255,255,255,0.12) 3px,
+      transparent 3px,
+      transparent 17px
+    );
+    opacity: 0.55;
+  }
+  .palm-coconut {
+    position: absolute;
+    top: 74px;
+    width: 14px;
+    height: 14px;
+    border-radius: 999px;
+    background: radial-gradient(circle at 30% 30%, #7a4b24 0%, #5b3418 72%, #3d220f 100%);
+    box-shadow: 0 4px 10px rgba(61, 34, 15, 0.18);
+  }
+  .palm-coconut.c1 { left: 60px; }
+  .palm-coconut.c2 { left: 74px; top: 78px; }
+  .palm-coconut.c3 { left: 87px; top: 72px; }
   .palm-leaf {
     position: absolute;
     left: 50%;
-    bottom: 94px;
-    width: 86px;
-    height: 22px;
-    transform-origin: 12px 50%;
-    border-radius: 24px 30px 12px 28px;
-    background: linear-gradient(90deg, #4ade80 0%, #22c55e 48%, #15803d 100%);
-    box-shadow: 0 8px 18px rgba(34, 197, 94, 0.22);
+    top: 34px;
+    width: 104px;
+    height: 24px;
+    transform-origin: 10px 50%;
+    border-radius: 30px 36px 18px 34px;
+    background: linear-gradient(90deg, #86efac 0%, #22c55e 44%, #15803d 100%);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.28), 0 10px 18px rgba(34, 197, 94, 0.18);
   }
-  .palm-leaf.l1 { transform: translateX(-12px) rotate(-68deg); }
-  .palm-leaf.l2 { transform: translateX(-10px) rotate(-36deg); }
-  .palm-leaf.l3 { transform: translateX(-8px) rotate(-8deg); }
-  .palm-leaf.l4 { transform: translateX(-10px) rotate(22deg); }
-  .palm-leaf.l5 { transform: translateX(-12px) rotate(52deg); }
+  .palm-leaf::after {
+    content: "";
+    position: absolute;
+    left: 12px;
+    right: 8px;
+    top: 50%;
+    height: 1px;
+    background: rgba(255,255,255,0.34);
+    transform: translateY(-50%);
+  }
+  .palm-leaf.l1 { transform: translateX(-18px) rotate(-76deg) scale(1.02); }
+  .palm-leaf.l2 { transform: translateX(-16px) rotate(-48deg) scale(1.04); }
+  .palm-leaf.l3 { transform: translateX(-12px) rotate(-18deg); }
+  .palm-leaf.l4 { transform: translateX(-8px) rotate(12deg) scale(1.02); }
+  .palm-leaf.l5 { transform: translateX(-10px) rotate(42deg) scale(1.01); }
+  .palm-leaf.l6 { transform: translateX(-16px) rotate(68deg) scale(0.98); }
   .palm-dot {
     position: absolute;
-    top: 28px;
+    top: 26px;
     width: 10px;
     height: 10px;
     border-radius: 999px;
     background: #f59e0b;
     box-shadow: 0 0 18px rgba(245, 158, 11, 0.4);
   }
-  .palm.left .palm-dot { right: 8px; }
-  .palm.right .palm-dot { left: 8px; }
+  .palm.left .palm-dot { right: 10px; }
+  .palm.right .palm-dot { left: 10px; }
   .kicker {
     margin: 0 0 18px;
     font-size: 18px;
@@ -958,7 +1005,12 @@ function PalmAccent({ side }) {
       <div className="palm-leaf l3" />
       <div className="palm-leaf l4" />
       <div className="palm-leaf l5" />
+      <div className="palm-leaf l6" />
+      <div className="palm-coconut c1" />
+      <div className="palm-coconut c2" />
+      <div className="palm-coconut c3" />
       <div className="palm-trunk" />
+      <div className="palm-shadow" />
     </div>
   );
 }
