@@ -204,7 +204,7 @@ const css = `
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    margin: 20px 0 16px;
+    margin: 8px 0 18px;
     padding: 0;
   }
   .logo-frame {
@@ -227,7 +227,7 @@ const css = `
   }
   
   .kicker {
-    margin: 0 0 18px;
+    margin: 0 0 6px;
     font-size: 18px;
     line-height: 1.2;
     letter-spacing: 0.24em;
@@ -978,10 +978,10 @@ export default function App() {
           <section className="hero">
             <div>
               <div className="pill"><span className="spark" />Summer drop is live</div>
+              <p className="kicker">How You Feelin'? Suppa Duppa.</p>
               <div className="logo-scene">
                 <div className="logo-frame"><img src={logoSrc} alt="Suppa Duppa" className="logo-main" /></div>
               </div>
-              <p className="kicker">How You Feelin'? Suppa Duppa.</p>
               <p className="mini-copy">Bright logo. Palm trees. Clean layout. Soft beach energy. A smoother first look that feels easy to shop.</p>
               <h1 className="title">Beach-ready hats and tanks with pure <span className="gradient-text">summer mood</span>.</h1>
               <p className="body">Suppa Duppa feels like walking barefoot on warm sand, catching ocean breeze, and pulling up in bright colors that make the whole day feel lighter.</p>
