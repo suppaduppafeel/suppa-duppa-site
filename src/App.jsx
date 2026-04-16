@@ -1,58 +1,5 @@
 import React, { useMemo, useState } from "react";
 import logoSrc from "./suppa-duppa-logo.png";
-import React, { useMemo, useState } from "react";
-import logoSrc from "./suppa-duppa-logo.png";
-import React, { useMemo, useState } from "react";
-const logoSvg = encodeURIComponent(`
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520">
-    <defs>
-      <linearGradient id="gold" x1="0" x2="1">
-        <stop offset="0%" stop-color="#ffe066"/>
-        <stop offset="100%" stop-color="#ffb703"/>
-      </linearGradient>
-      <linearGradient id="blue" x1="0" x2="1">
-        <stop offset="0%" stop-color="#d8f3ff"/>
-        <stop offset="100%" stop-color="#3bb8ff"/>
-      </linearGradient>
-      <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-        <feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#1e1b4b" flood-opacity="0.22"/>
-      </filter>
-    </defs>
-    <g filter="url(#shadow)">
-      <g transform="translate(0 8)">
-        <ellipse cx="440" cy="138" rx="148" ry="104" fill="#ff9ac4" stroke="#6f123d" stroke-width="10"/>
-        <ellipse cx="351" cy="112" rx="26" ry="36" fill="#ff9ac4" stroke="#6f123d" stroke-width="10"/>
-        <ellipse cx="529" cy="112" rx="26" ry="36" fill="#ff9ac4" stroke="#6f123d" stroke-width="10"/>
-        <rect x="360" y="108" rx="20" ry="20" width="72" height="36" fill="#111827"/>
-        <rect x="448" y="108" rx="20" ry="20" width="72" height="36" fill="#111827"/>
-        <rect x="426" y="120" rx="10" ry="10" width="26" height="10" fill="#111827"/>
-        <path d="M 418 160 Q 440 174 462 160" stroke="#6f123d" stroke-width="8" fill="none" stroke-linecap="round"/>
-        <path d="M 470 170 Q 578 158 640 178" stroke="#111827" stroke-width="7" fill="none" stroke-linecap="round"/>
-        <path d="M 470 186 Q 586 184 650 204" stroke="#111827" stroke-width="7" fill="none" stroke-linecap="round"/>
-        <path d="M 410 170 Q 302 158 240 178" stroke="#111827" stroke-width="7" fill="none" stroke-linecap="round"/>
-        <path d="M 410 186 Q 294 184 230 204" stroke="#111827" stroke-width="7" fill="none" stroke-linecap="round"/>
-        <rect x="300" y="194" rx="24" ry="24" width="146" height="40" fill="#ffb6d5" stroke="#6f123d" stroke-width="8"/>
-        <rect x="430" y="194" rx="24" ry="24" width="168" height="40" fill="#ffb6d5" stroke="#6f123d" stroke-width="8"/>
-      </g>
-      <g>
-        <text x="450" y="308" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="150" fill="#2e1065" stroke="#2e1065" stroke-width="40" paint-order="stroke">Suppa</text>
-        <text x="450" y="308" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="150" fill="url(#gold)" stroke="#fff7ed" stroke-width="10" paint-order="stroke">Suppa</text>
-        <text x="450" y="438" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="148" fill="#2e1065" stroke="#2e1065" stroke-width="40" paint-order="stroke">Duppa</text>
-        <text x="450" y="438" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="148" fill="url(#blue)" stroke="#fff7ed" stroke-width="10" paint-order="stroke">Duppa</text>
-      </g>
-      <g opacity="0.95">
-        <circle cx="172" cy="262" r="15" fill="#ffd60a"/>
-        <circle cx="126" cy="330" r="14" fill="#ff9f1c"/>
-        <circle cx="730" cy="250" r="16" fill="#38bdf8"/>
-        <circle cx="778" cy="328" r="15" fill="#ffd60a"/>
-        <circle cx="202" cy="404" r="18" fill="#ec4899"/>
-        <circle cx="714" cy="394" r="18" fill="#ec4899"/>
-      </g>
-    </g>
-  </svg>
-`);
-
-const logoSrc = `data:image/svg+xml;charset=UTF-8,${logoSvg}`;
 
 const hatColors = [
   {
