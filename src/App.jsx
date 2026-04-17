@@ -1,11 +1,15 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import logoSrc from "./suppa-duppa-logo.png";
 
+const SHOPIFY_DOMAIN = "kynxwh-eq.myshopify.com";
+const SHOPIFY_STOREFRONT_TOKEN = "998596932716baa15b75073a8d30b9f3";
+
 const hatColors = [
   {
     name: "Sunset Coral",
     gradient: "linear-gradient(135deg, #fff1e8 0%, #ffe3b3 28%, #ff8fb1 62%, #ff6b8a 100%)",
-    panel: "linear-gradient(135deg, rgba(255,184,116,0.95) 0%, rgba(255,149,181,0.92) 55%, rgba(255,105,180,0.96) 100%)",
+    panel:
+      "linear-gradient(135deg, rgba(255,184,116,0.95) 0%, rgba(255,149,181,0.92) 55%, rgba(255,105,180,0.96) 100%)",
     accent: "Coral Heat",
     glowA: "rgba(255, 148, 120, 0.28)",
     glowB: "rgba(255, 105, 180, 0.22)",
@@ -13,7 +17,8 @@ const hatColors = [
   {
     name: "Ocean Aqua",
     gradient: "linear-gradient(135deg, #ecfeff 0%, #d7f9ff 22%, #8fe3ff 58%, #4f8dff 100%)",
-    panel: "linear-gradient(135deg, rgba(127,236,255,0.96) 0%, rgba(72,199,255,0.94) 52%, rgba(71,127,255,0.96) 100%)",
+    panel:
+      "linear-gradient(135deg, rgba(127,236,255,0.96) 0%, rgba(72,199,255,0.94) 52%, rgba(71,127,255,0.96) 100%)",
     accent: "Cool Splash",
     glowA: "rgba(56, 189, 248, 0.26)",
     glowB: "rgba(59, 130, 246, 0.24)",
@@ -21,7 +26,8 @@ const hatColors = [
   {
     name: "Palm Lime",
     gradient: "linear-gradient(135deg, #f7ffe1 0%, #e9ffb3 26%, #8ee58f 62%, #3bcf86 100%)",
-    panel: "linear-gradient(135deg, rgba(202,255,113,0.96) 0%, rgba(82,221,128,0.95) 55%, rgba(34,197,94,0.96) 100%)",
+    panel:
+      "linear-gradient(135deg, rgba(202,255,113,0.96) 0%, rgba(82,221,128,0.95) 55%, rgba(34,197,94,0.96) 100%)",
     accent: "Fresh Energy",
     glowA: "rgba(132, 204, 22, 0.26)",
     glowB: "rgba(34, 197, 94, 0.22)",
@@ -29,20 +35,18 @@ const hatColors = [
   {
     name: "Sand Cream",
     gradient: "linear-gradient(135deg, #fff8ea 0%, #fff1bf 28%, #ffe59a 55%, #ffbf71 100%)",
-    panel: "linear-gradient(135deg, rgba(255,229,153,0.96) 0%, rgba(255,238,196,0.94) 52%, rgba(255,186,110,0.96) 100%)",
+    panel:
+      "linear-gradient(135deg, rgba(255,229,153,0.96) 0%, rgba(255,238,196,0.94) 52%, rgba(255,186,110,0.96) 100%)",
     accent: "Soft Shore",
     glowA: "rgba(255, 213, 128, 0.28)",
     glowB: "rgba(251, 191, 36, 0.18)",
   },
 ];
 
-const SHOPIFY_DOMAIN = "kynxwh-eq.myshopify.com";
-const SHOPIFY_STOREFRONT_TOKEN = "998596932716baa15b75073a8d30b9f3";
-
 const products = [
   {
-    id: "suppa-duppa-snapback",
-    name: "Suppa Duppa Washed Denim Cap",
+    id: "washed-denim-cap",
+    name: "SuppaDuppa Washed Denim Cap",
     type: "Hat",
     vibe: "Light, bright, and easy for sunny fits.",
     price: "$31.44",
@@ -203,22 +207,29 @@ const css = `
     background: #f97316;
     box-shadow: 0 0 18px rgba(249,115,22,.5);
   }
+  .kicker {
+    margin: 18px 0 6px;
+    font-size: 18px;
+    line-height: 1.2;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    font-weight: 900;
+    color: #0891b2;
+  }
   .logo-scene {
     position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin: 4px 0 12px;
-    padding: 0;
+    display: block;
+    width: 100%;
     max-width: 100%;
+    margin: 6px 0 16px;
+    padding: 0;
     overflow: visible;
   }
   .logo-frame {
     position: relative;
     z-index: 2;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    display: block;
+    width: 100%;
     padding: 0;
     background: transparent;
     border: 0;
@@ -226,22 +237,13 @@ const css = `
     backdrop-filter: none;
   }
   .logo-main {
+    display: block;
     width: 450px;
     max-width: 100%;
     height: auto;
     object-fit: contain;
     filter: drop-shadow(0 20px 30px rgba(0,0,0,0.12)) drop-shadow(0 8px 14px rgba(255,255,255,0.18));
     animation: floatLogo 5.6s ease-in-out infinite;
-  }
-  
-  .kicker {
-    margin: 0 0 6px;
-    font-size: 18px;
-    line-height: 1.2;
-    letter-spacing: 0.24em;
-    text-transform: uppercase;
-    font-weight: 900;
-    color: #0891b2;
   }
   .mini-copy {
     margin: 0 0 8px;
@@ -371,7 +373,7 @@ const css = `
     align-items: flex-start;
     justify-content: space-between;
     gap: 16px;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
   }
   .picker-label {
     font-size: 13px;
@@ -808,6 +810,51 @@ const css = `
   }
   .help-box strong { color: #334155; }
 
+  .shopify-live-card {
+    padding: 18px;
+  }
+  .shopify-embed-wrap {
+    width: 100%;
+  }
+  .shopify-embed-wrap .shopify-buy__product {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+  .shopify-embed-wrap .shopify-buy__product__img-wrapper {
+    margin: 0 0 14px !important;
+    border-radius: 22px;
+    overflow: hidden;
+  }
+  .shopify-embed-wrap .shopify-buy__product-title {
+    font-family: Inter, sans-serif !important;
+    font-size: 22px !important;
+    font-weight: 900 !important;
+    color: #0f172a !important;
+    line-height: 1.15 !important;
+    margin: 6px 0 8px !important;
+  }
+  .shopify-embed-wrap .shopify-buy__product__price {
+    font-family: Inter, sans-serif !important;
+    font-size: 18px !important;
+    font-weight: 800 !important;
+    color: #0f172a !important;
+    margin-bottom: 12px !important;
+  }
+  .shopify-embed-wrap .shopify-buy__btn {
+    font-family: Inter, sans-serif !important;
+    font-size: 15px !important;
+    font-weight: 800 !important;
+    border-radius: 999px !important;
+    padding: 16px 24px !important;
+    width: 100% !important;
+    background: #0f172a !important;
+  }
+  .shopify-embed-wrap .shopify-buy__btn:hover,
+  .shopify-embed-wrap .shopify-buy__btn:focus {
+    background: #1e293b !important;
+  }
+
   .footer { padding: 6px 0 72px; }
   .footer-grid {
     display: grid;
@@ -872,69 +919,47 @@ const css = `
       justify-self: stretch;
     }
   }
-    .grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
-    .row {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-  }
   @media (max-width: 768px) {
-    .container { width: min(100% - 22px, 100%); }
+    .container {
+      width: min(100% - 22px, 100%);
+    }
     .hero {
       position: relative;
+      display: block;
       padding-top: 92px;
-      gap: 22px;
-    }
-    .title {
-      font-size: 44px;
-      max-width: 100%;
-    }
-    .body {
-      font-size: 18px;
-      max-width: 100%;
-    }
-    .body-sub {
-      font-size: 15px;
-      max-width: 100%;
-    }
-    .stats, .grid, .featured-grid, .card-grid { grid-template-columns: 1fr; }
-    .showcase { gap: 16px; }
-    .row-title, .picker-title { font-size: 30px; }
-    .logo-scene {
-      width: 100%;
-      justify-content: flex-start;
-      margin: 6px 0 16px;
-    }
-    .logo-main {
-      width: min(100%, 360px);
+      padding-bottom: 24px;
     }
     .picker-wrap {
       position: absolute;
-      top: 8px;
+      top: 6px;
       right: 0;
       left: auto;
       width: auto;
-      max-width: 230px;
-      z-index: 3;
+      max-width: min(230px, calc(100% - 24px));
+      z-index: 5;
     }
     .picker-blur {
-      inset: -6px;
+      inset: -4px;
       border-radius: 999px;
-      filter: blur(10px);
+      filter: blur(8px);
     }
     .picker {
       border-radius: 999px;
-      padding: 10px 12px;
+      padding: 8px 10px;
       box-shadow: 0 14px 30px rgba(251,146,60,0.12);
+      min-height: auto;
     }
     .picker-top,
     .featured {
-      display: none;
+      display: none !important;
     }
     .color-list {
-      margin: 0;
-      gap: 8px;
+      display: flex;
       flex-wrap: nowrap;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
       overflow-x: auto;
       scrollbar-width: none;
     }
@@ -942,13 +967,53 @@ const css = `
       display: none;
     }
     .color-btn {
+      flex: 0 0 auto;
       padding: 8px 12px;
       font-size: 12px;
+      line-height: 1;
       white-space: nowrap;
+    }
+    .logo-scene {
+      width: 100%;
+      max-width: 100%;
+      margin: 6px 0 16px;
+    }
+    .logo-main {
+      width: min(100%, 360px);
+      max-width: 100%;
+      height: auto;
+    }
+    .title {
+      max-width: 100%;
+      font-size: 44px;
+    }
+    .body {
+      max-width: 100%;
+      font-size: 18px;
+      line-height: 1.65;
+    }
+    .body-sub {
+      max-width: 100%;
+      font-size: 15px;
+      line-height: 1.6;
     }
     .mini-copy {
       max-width: 100%;
       font-size: 14px;
+      line-height: 1.6;
+    }
+    .actions {
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .stats, .grid, .featured-grid, .card-grid {
+      grid-template-columns: 1fr;
+    }
+    .showcase {
+      gap: 16px;
+    }
+    .row-title, .picker-title {
+      font-size: 30px;
     }
   }
 `;
@@ -971,8 +1036,6 @@ function TankMock() {
     </div>
   );
 }
-
-
 
 function ShopifyBuyButton({ productId }) {
   const mountRef = useRef(null);
@@ -1002,17 +1065,33 @@ function ShopifyBuyButton({ productId }) {
             product: {
               iframe: false,
               contents: {
-                img: false,
-                title: false,
-                price: false,
+                img: true,
+                title: true,
+                price: true,
+                button: true,
+                buttonWithQuantity: false,
+                description: false,
               },
               text: {
                 button: "Add to cart",
               },
               styles: {
                 product: {
-                  margin: "0",
                   width: "100%",
+                  "max-width": "100%",
+                  margin: "0",
+                },
+                title: {
+                  "font-family": "Inter, sans-serif",
+                  "font-size": "22px",
+                  color: "#0f172a",
+                  "font-weight": "900",
+                },
+                price: {
+                  "font-family": "Inter, sans-serif",
+                  "font-size": "18px",
+                  color: "#0f172a",
+                  "font-weight": "800",
                 },
                 button: {
                   "font-family": "Inter, sans-serif",
@@ -1084,11 +1163,23 @@ function ShopifyBuyButton({ productId }) {
     };
   }, [productId]);
 
-  return <div ref={mountRef} style={{ marginTop: 14, width: "100%" }} />;
+  return <div ref={mountRef} className="shopify-embed-wrap" />;
 }
 
 function ShopifyEmbedCard({ product, selected }) {
   const isHat = product.type === "Hat";
+
+  if (product.shopifyProductId) {
+    return (
+      <div className="product-card shopify-live-card">
+        <div className="product-badge" style={{ position: "static", display: "inline-flex", marginBottom: 12 }}>
+          {product.badge}
+        </div>
+        <ShopifyBuyButton productId={product.shopifyProductId} />
+      </div>
+    );
+  }
+
   return (
     <div className="product-card">
       <div className="product-visual" style={{ backgroundImage: selected.panel }}>
@@ -1108,14 +1199,8 @@ function ShopifyEmbedCard({ product, selected }) {
           <div className="price">{product.price}</div>
         </div>
         <p className="product-copy">{product.vibe}</p>
-        {product.shopifyProductId ? (
-          <ShopifyBuyButton productId={product.shopifyProductId} />
-        ) : (
-          <>
-            <a className="card-btn" href="#">Shop on Shopify</a>
-            <div className="help-box">Add a Shopify Buy Button or product link for this card next.</div>
-          </>
-        )}
+        <a className="card-btn" href="#">Shop on Shopify</a>
+        <div className="help-box">Add the next Shopify Buy Button code for this card.</div>
       </div>
     </div>
   );
@@ -1178,7 +1263,7 @@ export default function App() {
               <div className="logo-scene">
                 <div className="logo-frame"><img src={logoSrc} alt="Suppa Duppa" className="logo-main" /></div>
               </div>
-              <p className="mini-copy">Bright logo. Palm trees. Clean layout. Soft beach energy. A smoother first look that feels easy to shop.</p>
+              <p className="mini-copy">Bright logo. Clean layout. Soft beach energy. A smoother first look that feels easy to shop.</p>
               <h1 className="title"><span className="gradient-text">Beach-ready hats and tanks with pure summer mood.</span></h1>
               <p className="body">Suppa Duppa feels like walking barefoot on warm sand, catching ocean breeze, and pulling up in bright colors that make the whole day feel lighter.</p>
               <p className="body-sub">Soft ocean breeze, clean color, smooth summer energy, and a fresh feel that fits the whole mood right.</p>
@@ -1249,14 +1334,14 @@ export default function App() {
                 <div>
                   <div className="row-kicker" style={{ color: "#0891b2" }}>Shopify-ready section</div>
                   <h3 style={{ margin: "10px 0 0", fontSize: 34, lineHeight: 1.1, color: "#0f172a" }}>Drop your Shopify products right into this layout.</h3>
-                  <p style={{ margin: "14px 0 0", maxWidth: 720, fontSize: 16, lineHeight: 1.8, color: "#64748b" }}>Each product card below can take either a Shopify product link or a full Shopify Buy Button embed. Keep the same Suppa Duppa design, and swap the mock cards for live products whenever you are ready.</p>
+                  <p style={{ margin: "14px 0 0", maxWidth: 720, fontSize: 16, lineHeight: 1.8, color: "#64748b" }}>The first card is live with a real Shopify product image, price, and add-to-cart button. Add the next Buy Button product IDs the same way for the rest of your featured products.</p>
                 </div>
                 <div className="dark-card">
                   <div className="row-kicker" style={{ color: "#67e8f9" }}>How to use it</div>
                   <ol className="dark-list">
-                    <li>Add your Shopify product URL in each card.</li>
-                    <li>Or paste the Shopify Buy Button embed code into the product object.</li>
-                    <li>Replace the sample products with your real Printful-synced Shopify items.</li>
+                    <li>Create a Product Buy Button in Shopify.</li>
+                    <li>Copy the product ID from the code.</li>
+                    <li>Paste that product ID into the next card in this file.</li>
                   </ol>
                 </div>
               </div>
