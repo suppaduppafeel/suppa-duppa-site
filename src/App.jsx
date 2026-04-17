@@ -8,8 +8,7 @@ const hatColors = [
   {
     name: "Sunset Coral",
     gradient: "linear-gradient(135deg, #fff1e8 0%, #ffe3b3 28%, #ff8fb1 62%, #ff6b8a 100%)",
-    panel:
-      "linear-gradient(135deg, rgba(255,184,116,0.95) 0%, rgba(255,149,181,0.92) 55%, rgba(255,105,180,0.96) 100%)",
+    panel: "linear-gradient(135deg, rgba(255,184,116,0.95) 0%, rgba(255,149,181,0.92) 55%, rgba(255,105,180,0.96) 100%)",
     accent: "Coral Heat",
     glowA: "rgba(255, 148, 120, 0.28)",
     glowB: "rgba(255, 105, 180, 0.22)",
@@ -17,8 +16,7 @@ const hatColors = [
   {
     name: "Ocean Aqua",
     gradient: "linear-gradient(135deg, #ecfeff 0%, #d7f9ff 22%, #8fe3ff 58%, #4f8dff 100%)",
-    panel:
-      "linear-gradient(135deg, rgba(127,236,255,0.96) 0%, rgba(72,199,255,0.94) 52%, rgba(71,127,255,0.96) 100%)",
+    panel: "linear-gradient(135deg, rgba(127,236,255,0.96) 0%, rgba(72,199,255,0.94) 52%, rgba(71,127,255,0.96) 100%)",
     accent: "Cool Splash",
     glowA: "rgba(56, 189, 248, 0.26)",
     glowB: "rgba(59, 130, 246, 0.24)",
@@ -26,8 +24,7 @@ const hatColors = [
   {
     name: "Palm Lime",
     gradient: "linear-gradient(135deg, #f7ffe1 0%, #e9ffb3 26%, #8ee58f 62%, #3bcf86 100%)",
-    panel:
-      "linear-gradient(135deg, rgba(202,255,113,0.96) 0%, rgba(82,221,128,0.95) 55%, rgba(34,197,94,0.96) 100%)",
+    panel: "linear-gradient(135deg, rgba(202,255,113,0.96) 0%, rgba(82,221,128,0.95) 55%, rgba(34,197,94,0.96) 100%)",
     accent: "Fresh Energy",
     glowA: "rgba(132, 204, 22, 0.26)",
     glowB: "rgba(34, 197, 94, 0.22)",
@@ -35,8 +32,7 @@ const hatColors = [
   {
     name: "Sand Cream",
     gradient: "linear-gradient(135deg, #fff8ea 0%, #fff1bf 28%, #ffe59a 55%, #ffbf71 100%)",
-    panel:
-      "linear-gradient(135deg, rgba(255,229,153,0.96) 0%, rgba(255,238,196,0.94) 52%, rgba(255,186,110,0.96) 100%)",
+    panel: "linear-gradient(135deg, rgba(255,229,153,0.96) 0%, rgba(255,238,196,0.94) 52%, rgba(255,186,110,0.96) 100%)",
     accent: "Soft Shore",
     glowA: "rgba(255, 213, 128, 0.28)",
     glowB: "rgba(251, 191, 36, 0.18)",
@@ -848,7 +844,71 @@ const css = `
     border-radius: 999px !important;
     padding: 16px 24px !important;
     width: 100% !important;
-    background: #0f172a !important;
+    background: linear-gradient(90deg, #ff8a3d 0%, #ff4fa3 52%, #4fc9ff 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 16px 28px rgba(255, 79, 163, 0.24) !important;
+  }
+  .shopify-embed-wrap .shopify-buy__btn[disabled] {
+    opacity: 0.7 !important;
+  }
+  .shopify-embed-wrap .shopify-buy__option-select,
+  .shopify-embed-wrap .shopify-buy__option-select__select,
+  .shopify-embed-wrap .shopify-buy__quantity,
+  .shopify-embed-wrap .shopify-buy__quantity-increment,
+  .shopify-embed-wrap .shopify-buy__quantity-decrement,
+  .shopify-embed-wrap select {
+    font-family: Inter, sans-serif !important;
+  }
+  .shopify-embed-wrap .shopify-buy__option-select {
+    margin: 0 0 12px !important;
+  }
+  .shopify-embed-wrap .shopify-buy__option-select__label {
+    display: block !important;
+    margin: 0 0 6px !important;
+    font-size: 11px !important;
+    letter-spacing: .24em !important;
+    text-transform: uppercase !important;
+    font-weight: 900 !important;
+    color: #f97316 !important;
+  }
+  .shopify-embed-wrap .shopify-buy__option-select__select,
+  .shopify-embed-wrap select {
+    width: 100% !important;
+    min-height: 46px !important;
+    padding: 0 14px !important;
+    border-radius: 16px !important;
+    border: 1px solid rgba(15, 23, 42, 0.12) !important;
+    background: rgba(255,255,255,0.92) !important;
+    color: #0f172a !important;
+    box-shadow: 0 8px 18px rgba(15,23,42,0.06) !important;
+  }
+  .shopify-embed-wrap .shopify-buy__quantity-container {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0 !important;
+    margin: 10px 0 14px !important;
+  }
+  .shopify-embed-wrap .shopify-buy__quantity,
+  .shopify-embed-wrap .shopify-buy__quantity-increment,
+  .shopify-embed-wrap .shopify-buy__quantity-decrement {
+    height: 46px !important;
+    border: 1px solid rgba(15, 23, 42, 0.12) !important;
+    background: rgba(255,255,255,0.92) !important;
+    color: #0f172a !important;
+  }
+  .shopify-embed-wrap .shopify-buy__quantity {
+    min-width: 58px !important;
+    text-align: center !important;
+    font-weight: 800 !important;
+  }
+  .shopify-embed-wrap .shopify-buy__quantity-decrement {
+    border-radius: 16px 0 0 16px !important;
+  }
+  .shopify-embed-wrap .shopify-buy__quantity-increment {
+    border-radius: 0 16px 16px 0 !important;
+  }
+  .shopify-embed-wrap .shopify-buy__btn-wrapper {
+    margin-top: 0 !important;
   }
   .shopify-embed-wrap .shopify-buy__btn:hover,
   .shopify-embed-wrap .shopify-buy__btn:focus {
@@ -1068,8 +1128,9 @@ function ShopifyBuyButton({ productId }) {
                 img: true,
                 title: true,
                 price: true,
-                button: true,
-                buttonWithQuantity: false,
+                options: true,
+                button: false,
+                buttonWithQuantity: true,
                 description: false,
               },
               text: {
@@ -1097,12 +1158,12 @@ function ShopifyBuyButton({ productId }) {
                   "font-family": "Inter, sans-serif",
                   "font-size": "15px",
                   "font-weight": "800",
-                  "background-color": "#0f172a",
+                  "background-color": "#ff4fa3",
                   ":hover": {
-                    "background-color": "#1e293b",
+                    "background-color": "#ff3b96",
                   },
                   ":focus": {
-                    "background-color": "#1e293b",
+                    "background-color": "#ff3b96",
                   },
                   "border-radius": "999px",
                   padding: "16px 24px",
@@ -1334,7 +1395,7 @@ export default function App() {
                 <div>
                   <div className="row-kicker" style={{ color: "#0891b2" }}>Shopify-ready section</div>
                   <h3 style={{ margin: "10px 0 0", fontSize: 34, lineHeight: 1.1, color: "#0f172a" }}>Drop your Shopify products right into this layout.</h3>
-                  <p style={{ margin: "14px 0 0", maxWidth: 720, fontSize: 16, lineHeight: 1.8, color: "#64748b" }}>The first card is live with a real Shopify product image, price, and add-to-cart button. Add the next Buy Button product IDs the same way for the rest of your featured products.</p>
+                  <p style={{ margin: "14px 0 0", maxWidth: 720, fontSize: 16, lineHeight: 1.8, color: "#64748b" }}>The first card is live with a real Shopify product image, variant picker, quantity controls, price, and add-to-cart button. Add the next Buy Button product IDs the same way for the rest of your featured products.</p>
                 </div>
                 <div className="dark-card">
                   <div className="row-kicker" style={{ color: "#67e8f9" }}>How to use it</div>
