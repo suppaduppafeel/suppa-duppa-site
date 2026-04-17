@@ -92,7 +92,7 @@ const featuredProducts = [
     badge: "Premium",
     vibe: "Vintage texture with a smoother, elevated finish.",
     shopUrl: "https://shop.suppaduppa.us/products/suppaduppa-vintage-cotton-twill-cap",
-    handle: "suppaduppa-vintage-cotton-twill-cap",
+    handle: "vintage-cotton-twill-cap",
     render: "blackHat",
   },
   {
