@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import logoSrc from "./suppa-duppa-logo.png";
 
 const COLLECTION_URL = "https://shop.suppaduppa.us/collections/suppaduppa-summer-drop";
@@ -48,6 +48,7 @@ const featuredProducts = [
     badge: "Hot Drop",
     vibe: "Bright, breezy, and ready for shoreline weather.",
     shopUrl: "https://shop.suppaduppa.us/products/suppaduppa-summer-tank",
+    handle: "suppaduppa-summer-tank",
     render: "tank",
   },
   {
@@ -58,6 +59,7 @@ const featuredProducts = [
     badge: "Best Seller",
     vibe: "Easy everyday cap with clean Suppa Duppa energy.",
     shopUrl: "https://shop.suppaduppa.us/products/suppaduppa-5-panel-cap",
+    handle: "suppaduppa-5-panel-cap",
     render: "hat",
   },
   {
@@ -68,6 +70,7 @@ const featuredProducts = [
     badge: "Beach Pick",
     vibe: "A lighter cap look with playful summer pop.",
     shopUrl: "https://shop.suppaduppa.us/products/suppaduppa-foam-trucker-cap",
+    handle: "suppaduppa-foam-trucker-cap",
     render: "hat",
   },
   {
@@ -78,6 +81,7 @@ const featuredProducts = [
     badge: "Fresh Color",
     vibe: "Soft denim feel with a laid-back sunny mood.",
     shopUrl: "https://shop.suppaduppa.us/products/suppaduppa-washed-denim-cap",
+    handle: "suppaduppa-washed-denim-cap",
     render: "denimHat",
   },
   {
@@ -88,6 +92,7 @@ const featuredProducts = [
     badge: "Premium",
     vibe: "Vintage texture with a smoother, elevated finish.",
     shopUrl: "https://shop.suppaduppa.us/products/suppaduppa-vintage-cotton-twill-cap",
+    handle: "suppaduppa-vintage-cotton-twill-cap",
     render: "blackHat",
   },
   {
@@ -98,6 +103,7 @@ const featuredProducts = [
     badge: "Cozy",
     vibe: "A clean heavyweight piece for breezy nights.",
     shopUrl: "https://shop.suppaduppa.us/products/oversized-heavyweight-hoodie",
+    handle: "oversized-heavyweight-hoodie",
     render: "hoodie",
   },
 ];
@@ -720,6 +726,13 @@ const css = `
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 24px;
+  }
+  .product-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 12px 18px rgba(15,23,42,0.12));
   }
   .product-body {
     padding: 18px;
@@ -906,15 +919,44 @@ function ProductVisual({ kind }) {
   return <HatMock tone="#111111" />;
 }
 
+function useShopifyProductImage(handle) {
+  const [imageUrl, setImageUrl] = useState("");
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadImage() {
+      try {
+        const response = await fetch(`https://shop.suppaduppa.us/products/${handle}.js`);
+        if (!response.ok) return;
+        const data = await response.json();
+        const nextImage = data?.featured_image || data?.images?.[0] || "";
+        if (!cancelled) setImageUrl(nextImage);
+      } catch (error) {
+        if (!cancelled) setImageUrl("");
+      }
+    }
+
+    if (handle) loadImage();
+    return () => {
+      cancelled = true;
+    };
+  }, [handle]);
+
+  return imageUrl;
+}
+
 function FeaturedCard({ product, selected }) {
+  const imageUrl = useShopifyProductImage(product.handle);
+
   return (
-    <a className="product-link" href={product.shopUrl} target="_blank" rel="noreferrer">
+    <a className="product-link" href={product.shopUrl}>
       <article className="product-card">
         <div className="product-visual" style={{ "--panelGradient": selected.panel }}>
           <div className="product-accent">{selected.accent}</div>
           <div className="product-badge">{product.badge}</div>
           <div className="product-visual-inner">
-            <ProductVisual kind={product.render} />
+            {imageUrl ? <img className="product-photo" src={imageUrl} alt={product.name} loading="lazy" /> : <ProductVisual kind={product.render} />}
           </div>
           <div className="product-color">{selected.name}</div>
         </div>
@@ -968,10 +1010,10 @@ export default function App() {
               <p className="body">Suppa Duppa feels like walking barefoot on warm sand, catching ocean breeze, and pulling up in bright colors that make the whole day feel lighter.</p>
               <p className="body-sub">Soft ocean breeze, clean color, smooth summer energy, and a fresh feel that fits the whole mood right.</p>
               <div className="actions">
-                <a href={COLLECTION_URL} className="btn" target="_blank" rel="noreferrer">
+                <a href={COLLECTION_URL} className="btn">
                   <span>🛍️</span><span>Shop the collection</span>
                 </a>
-                <a href={ALL_PRODUCTS_URL} className="btn-outline" target="_blank" rel="noreferrer">
+                <a href={ALL_PRODUCTS_URL} className="btn-outline">
                   <span>🌊</span><span>View summer colors</span>
                 </a>
               </div>
@@ -1042,7 +1084,7 @@ export default function App() {
             </div>
 
             <div className="products-footer">
-              <a href={ALL_PRODUCTS_URL} className="view-all-btn" target="_blank" rel="noreferrer">View all products</a>
+              <a href={ALL_PRODUCTS_URL} className="view-all-btn">View all products</a>
             </div>
           </section>
 
