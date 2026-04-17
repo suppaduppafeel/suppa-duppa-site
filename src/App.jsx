@@ -1,8 +1,8 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useMemo, useState } from "react";
 import logoSrc from "./suppa-duppa-logo.png";
 
-const SHOPIFY_DOMAIN = "kynxwh-eq.myshopify.com";
-const SHOPIFY_STOREFRONT_TOKEN = "998596932716baa15b75073a8d30b9f3";
+const COLLECTION_URL = "https://shop.suppaduppa.us/collections/suppaduppa-summer-drop";
+const ALL_PRODUCTS_URL = "https://shop.suppaduppa.us/collections/all";
 
 const hatColors = [
   {
@@ -39,39 +39,66 @@ const hatColors = [
   },
 ];
 
-const products = [
+const featuredProducts = [
+  {
+    id: "summer-tank",
+    name: "SuppaDuppa Summer Tank",
+    type: "Tank",
+    price: "$29.50",
+    badge: "Hot Drop",
+    vibe: "Bright, breezy, and ready for shoreline weather.",
+    shopUrl: "https://shop.suppaduppa.us/products/suppaduppa-summer-tank",
+    render: "tank",
+  },
+  {
+    id: "five-panel-cap",
+    name: "SuppaDuppa 5 Panel Cap",
+    type: "Hat",
+    price: "$17.00",
+    badge: "Best Seller",
+    vibe: "Easy everyday cap with clean Suppa Duppa energy.",
+    shopUrl: "https://shop.suppaduppa.us/products/suppaduppa-5-panel-cap",
+    render: "hat",
+  },
+  {
+    id: "foam-trucker-cap",
+    name: "SuppaDuppa Foam Trucker Cap",
+    type: "Hat",
+    price: "$15.50",
+    badge: "Beach Pick",
+    vibe: "A lighter cap look with playful summer pop.",
+    shopUrl: "https://shop.suppaduppa.us/products/suppaduppa-foam-trucker-cap",
+    render: "hat",
+  },
   {
     id: "washed-denim-cap",
     name: "SuppaDuppa Washed Denim Cap",
     type: "Hat",
-    vibe: "Light, bright, and easy for sunny fits.",
     price: "$31.44",
-    badge: "Best Seller",
-    shopifyProductId: "9171226067170",
-  },
-  {
-    id: "wave-runner-tank",
-    name: "Wave Runner Tank",
-    type: "Tank",
-    vibe: "Breezy color and shoreline-ready energy.",
-    price: "$29",
-    badge: "New Drop",
-  },
-  {
-    id: "palm-breeze-tank",
-    name: "Palm Breeze Tank",
-    type: "Tank",
-    vibe: "Smooth summer feel with playful pop.",
-    price: "$29",
-    badge: "Summer Pick",
-  },
-  {
-    id: "shoreline-hat",
-    name: "Shoreline Hat",
-    type: "Hat",
-    vibe: "Clean beach mood for everyday wear.",
-    price: "$34",
     badge: "Fresh Color",
+    vibe: "Soft denim feel with a laid-back sunny mood.",
+    shopUrl: "https://shop.suppaduppa.us/products/suppaduppa-washed-denim-cap",
+    render: "denimHat",
+  },
+  {
+    id: "vintage-cotton-twill-cap",
+    name: "SuppaDuppa Vintage Cotton Twill Cap",
+    type: "Hat",
+    price: "$40.99",
+    badge: "Premium",
+    vibe: "Vintage texture with a smoother, elevated finish.",
+    shopUrl: "https://shop.suppaduppa.us/products/suppaduppa-vintage-cotton-twill-cap",
+    render: "blackHat",
+  },
+  {
+    id: "oversized-hoodie",
+    name: "Oversized Heavyweight Hoodie",
+    type: "Hoodie",
+    price: "$47.45",
+    badge: "Cozy",
+    vibe: "A clean heavyweight piece for breezy nights.",
+    shopUrl: "https://shop.suppaduppa.us/products/oversized-heavyweight-hoodie",
+    render: "hoodie",
   },
 ];
 
@@ -82,6 +109,7 @@ const css = `
     margin: 0;
     font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     color: #0f172a;
+    background: #fff;
   }
   img { display: block; max-width: 100%; }
   a { color: inherit; text-decoration: none; }
@@ -107,10 +135,6 @@ const css = `
   @keyframes pulseGlow {
     0%, 100% { box-shadow: 0 18px 36px rgba(15, 23, 42, 0.16); }
     50% { box-shadow: 0 24px 48px rgba(15, 23, 42, 0.24); }
-  }
-  @keyframes cardDrift {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-6px); }
   }
   @keyframes shimmer {
     0% { background-position: 0% 50%; }
@@ -181,7 +205,7 @@ const css = `
     grid-template-columns: 1.16fr 0.84fr;
     gap: 34px;
     align-items: start;
-    padding: 54px 0 28px;
+    padding: 54px 0 20px;
   }
   .pill {
     display: inline-flex;
@@ -220,17 +244,6 @@ const css = `
     margin: 6px 0 16px;
     padding: 0;
     overflow: visible;
-  }
-  .logo-frame {
-    position: relative;
-    z-index: 2;
-    display: block;
-    width: 100%;
-    padding: 0;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    backdrop-filter: none;
   }
   .logo-main {
     display: block;
@@ -287,7 +300,7 @@ const css = `
     gap: 12px;
     margin-top: 22px;
   }
-  .btn, .btn-outline {
+  .btn, .btn-outline, .view-all-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -304,13 +317,13 @@ const css = `
     color: #fff;
     animation: pulseGlow 4s ease-in-out infinite;
   }
-  .btn-outline {
+  .btn-outline, .view-all-btn {
     background: rgba(255,255,255,0.62);
     border: 1px solid rgba(255,255,255,0.7);
     color: #0f172a;
     backdrop-filter: blur(10px);
   }
-  .btn:hover, .btn-outline:hover, .card-btn:hover, .email-btn:hover { transform: translateY(-1px); }
+  .btn:hover, .btn-outline:hover, .view-all-btn:hover, .product-link:hover { transform: translateY(-1px); }
 
   .stats {
     display: grid;
@@ -325,10 +338,7 @@ const css = `
     background: rgba(255,255,255,0.62);
     border: 1px solid rgba(255,255,255,0.7);
     backdrop-filter: blur(10px);
-    animation: cardDrift 8s ease-in-out infinite;
   }
-  .stat:nth-child(2) { animation-delay: .8s; }
-  .stat:nth-child(3) { animation-delay: 1.6s; }
   .stat-number {
     font-size: 34px;
     line-height: 1;
@@ -408,20 +418,13 @@ const css = `
     color: #fff;
     border-color: #0f172a;
   }
-
   .featured {
     position: relative;
     overflow: hidden;
     border-radius: 24px;
     padding: 16px;
     min-height: 312px;
-  }
-  .featured::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at top, rgba(255,255,255,0.85), transparent 35%);
-    pointer-events: none;
+    background-image: var(--panelGradient);
   }
   .featured-card {
     position: relative;
@@ -450,9 +453,7 @@ const css = `
     background: rgba(255,255,255,0.82);
     padding: 16px;
     box-shadow: 0 12px 30px rgba(15,23,42,0.08);
-    animation: cardDrift 7s ease-in-out infinite;
   }
-  .product-mini:nth-child(2) { animation-delay: .7s; }
   .product-mini-title {
     margin-top: 12px;
     text-align: center;
@@ -462,17 +463,14 @@ const css = `
     font-weight: 800;
     color: #64748b;
   }
-  .product-mini-logo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
 
-  .hat {
+  .hat, .tee, .hoodie, .tank {
     position: relative;
+    margin: 0 auto;
+  }
+  .hat {
     width: 150px;
     height: 96px;
-    margin: 0 auto;
   }
   .hat-crown {
     position: absolute;
@@ -481,7 +479,7 @@ const css = `
     width: 110px;
     height: 46px;
     border-radius: 999px 999px 24px 24px;
-    background: #fff;
+    background: var(--productBody, #fff);
     box-shadow: 0 8px 18px rgba(15,23,42,0.08);
   }
   .hat-brim {
@@ -491,7 +489,7 @@ const css = `
     width: 72px;
     height: 14px;
     border-radius: 999px;
-    background: #fff;
+    background: var(--productBody, #fff);
     box-shadow: 0 6px 14px rgba(15,23,42,0.08);
   }
   .hat-logo {
@@ -505,12 +503,10 @@ const css = `
     box-shadow: 0 4px 14px rgba(15,23,42,0.08);
   }
   .tank {
-    position: relative;
-    width: 94px;
-    height: 124px;
-    margin: 0 auto;
-    border-radius: 22px;
-    background: #fff;
+    width: 98px;
+    height: 132px;
+    border-radius: 24px;
+    background: var(--productBody, #fff);
     box-shadow: 0 10px 22px rgba(15,23,42,0.08);
   }
   .tank-neck {
@@ -521,7 +517,7 @@ const css = `
     height: 22px;
     transform: translateX(-50%);
     border-radius: 0 0 22px 22px;
-    border: 6px solid #fff;
+    border: 6px solid var(--productBody, #fff);
     border-top: 0;
   }
   .tank-logo {
@@ -534,24 +530,99 @@ const css = `
     background: rgba(255,255,255,0.94);
     box-shadow: 0 4px 14px rgba(15,23,42,0.06);
   }
-  .featured-copy {
-    margin-top: 16px;
-    text-align: center;
-    color: rgba(255,255,255,0.96);
-    font-size: 15px;
-    line-height: 1.6;
-    font-weight: 700;
+  .hoodie {
+    width: 142px;
+    height: 138px;
+    border-radius: 18px 18px 26px 26px;
+    background: var(--productBody, #7c746f);
+    box-shadow: 0 10px 22px rgba(15,23,42,0.08);
+  }
+  .hoodie-hood {
+    position: absolute;
+    left: 50%;
+    top: -14px;
+    width: 62px;
+    height: 46px;
+    transform: translateX(-50%);
+    border-radius: 0 0 34px 34px;
+    border: 12px solid var(--productBody, #7c746f);
+    border-top: 0;
+  }
+  .hoodie-pocket {
+    position: absolute;
+    left: 38px;
+    bottom: 18px;
+    width: 66px;
+    height: 30px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.12);
+  }
+  .hoodie-logo {
+    position: absolute;
+    left: 36px;
+    right: 36px;
+    top: 44px;
+    padding: 4px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.92);
+  }
+  .tee {
+    width: 150px;
+    height: 118px;
+    border-radius: 12px 12px 20px 20px;
+    background: var(--productBody, #fff);
+    box-shadow: 0 10px 22px rgba(15,23,42,0.08);
+  }
+  .tee-sleeve-left,
+  .tee-sleeve-right {
+    position: absolute;
+    top: 10px;
+    width: 34px;
+    height: 48px;
+    background: var(--productBody, #fff);
+  }
+  .tee-sleeve-left {
+    left: -22px;
+    border-radius: 20px 0 14px 14px;
+    transform: rotate(25deg);
+  }
+  .tee-sleeve-right {
+    right: -22px;
+    border-radius: 0 20px 14px 14px;
+    transform: rotate(-25deg);
+  }
+  .tee-neck {
+    position: absolute;
+    left: 50%;
+    top: -5px;
+    width: 34px;
+    height: 16px;
+    transform: translateX(-50%);
+    border-radius: 0 0 16px 16px;
+    border: 5px solid rgba(255,255,255,0.8);
+    border-top: 0;
+  }
+  .tee-logo {
+    position: absolute;
+    left: 28px;
+    right: 28px;
+    top: 28px;
+    padding: 4px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.92);
   }
 
-  .shopify { padding: 8px 0 18px; }
-  .row {
+  .products-section {
+    padding: 14px 0 70px;
+  }
+  .section-header {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
     gap: 20px;
-    margin-bottom: 18px;
+    margin-bottom: 22px;
   }
-  .row-kicker {
+  .section-kicker {
     font-size: 13px;
     line-height: 1.2;
     letter-spacing: .38em;
@@ -559,142 +630,42 @@ const css = `
     font-weight: 900;
     color: #f97316;
   }
-  .row-title {
+  .section-title {
     margin: 8px 0 0;
-    font-size: 40px;
-    line-height: 1.04;
+    font-size: 42px;
+    line-height: 1.05;
     font-weight: 900;
     color: #0f172a;
   }
-  .row-copy {
+  .section-copy {
     max-width: 520px;
     margin: 0;
     font-size: 17px;
     line-height: 1.7;
     color: #475569;
   }
-  .info-card {
-    margin-bottom: 22px;
-    border-radius: 30px;
-    padding: 20px;
-    background: rgba(255,255,255,0.68);
-    border: 1px solid rgba(255,255,255,0.72);
-    box-shadow: 0 24px 50px rgba(249,115,22,0.08);
-    backdrop-filter: blur(12px);
-  }
-  .info-grid {
+  .products-grid {
     display: grid;
-    grid-template-columns: 1.2fr 0.8fr;
+    grid-template-columns: repeat(3, minmax(0,1fr));
     gap: 20px;
-    align-items: center;
   }
-  .dark-card {
-    border-radius: 28px;
-    padding: 22px;
-    background: #0f172a;
-    color: #fff;
-    box-shadow: 0 24px 48px rgba(15,23,42,0.18);
-  }
-  .dark-list {
-    margin: 14px 0 0;
-    padding-left: 18px;
-    color: rgba(255,255,255,0.82);
-    font-size: 14px;
-    line-height: 1.7;
-  }
-
-  .showcase {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 18px;
-    margin-bottom: 24px;
-  }
-  .card {
-    border-radius: 34px;
-    background: rgba(255,255,255,0.7);
-    border: 1px solid rgba(255,255,255,0.74);
-    box-shadow: 0 30px 70px rgba(249,115,22,0.08);
-    backdrop-filter: blur(12px);
-    overflow: hidden;
-    animation: cardDrift 9s ease-in-out infinite;
-  }
-  .card-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0,1fr));
-  }
-  .card-side {
-    position: relative;
-    min-height: 320px;
-    padding: 30px;
-  }
-  .card-side-a {
-    background: linear-gradient(180deg, rgba(125,211,252,0.35), rgba(254,249,195,0.8), rgba(253,230,138,0.9));
-  }
-  .card-side-b {
-    background: linear-gradient(135deg, rgba(251,207,232,0.88), rgba(255,237,213,0.9), rgba(207,250,254,0.9));
-  }
-  .chip {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 14px;
-    border-radius: 999px;
-    background: rgba(255,255,255,0.72);
-    font-size: 12px;
-    line-height: 1.1;
-    letter-spacing: .35em;
-    text-transform: uppercase;
-    font-weight: 900;
-  }
-  .chip-pink { color: #db2777; }
-  .chip-cyan { color: #0891b2; }
-  .chip-orange { color: #f97316; }
-  .logo-panel {
-    display: flex;
-    justify-content: center;
-    padding: 26px 0;
-  }
-  .logo-panel img {
-    max-width: 420px;
-    filter: drop-shadow(0 16px 28px rgba(15,23,42,0.18));
-    animation: floatLogo 6.2s ease-in-out infinite;
-  }
-  .showcase-copy {
-    max-width: 520px;
-    font-size: 15px;
-    line-height: 1.8;
-    color: #475569;
-    font-weight: 700;
-  }
-  .tank-card-side { padding: 24px; }
-  .tank-card-panel {
-    margin-top: 18px;
-    padding: 22px;
-    border-radius: 28px;
-    background: linear-gradient(135deg, rgba(186,230,253,0.9), rgba(255,255,255,0.96), rgba(251,207,232,0.76));
-  }
-
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0,1fr));
-    gap: 18px;
+  .product-link {
+    display: block;
   }
   .product-card {
+    height: 100%;
     overflow: hidden;
     border-radius: 30px;
     border: 1px solid rgba(255,255,255,0.76);
     background: rgba(255,255,255,0.72);
     box-shadow: 0 24px 52px rgba(249,115,22,0.08);
     backdrop-filter: blur(12px);
-    animation: cardDrift 8.6s ease-in-out infinite;
   }
-  .product-card:nth-child(2) { animation-delay: .5s; }
-  .product-card:nth-child(3) { animation-delay: 1s; }
-  .product-card:nth-child(4) { animation-delay: 1.5s; }
   .product-visual {
     position: relative;
     height: 250px;
     overflow: hidden;
+    background-image: var(--panelGradient);
   }
   .product-visual::after {
     content: "";
@@ -743,7 +714,16 @@ const css = `
     font-weight: 700;
     backdrop-filter: blur(10px);
   }
-  .product-body { padding: 18px; }
+  .product-visual-inner {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .product-body {
+    padding: 18px;
+  }
   .product-top {
     display: flex;
     align-items: flex-start;
@@ -772,6 +752,7 @@ const css = `
     color: #fff;
     font-size: 14px;
     font-weight: 800;
+    white-space: nowrap;
   }
   .product-copy {
     margin: 12px 0 0;
@@ -779,198 +760,27 @@ const css = `
     line-height: 1.7;
     color: #64748b;
   }
-  .card-btn, .email-btn {
+  .product-cta {
+    margin-top: 14px;
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    width: 100%;
-    min-height: 52px;
-    margin-top: 14px;
-    padding: 0 18px;
-    border-radius: 999px;
-    border: 0;
-    background: #0f172a;
-    color: #fff;
-    font-weight: 800;
-    cursor: pointer;
-  }
-  .help-box {
-    margin-top: 14px;
-    border-radius: 20px;
-    border: 1px dashed #cbd5e1;
-    background: #f8fafc;
-    padding: 14px;
+    gap: 8px;
     font-size: 14px;
-    line-height: 1.6;
-    color: #64748b;
-  }
-  .help-box strong { color: #334155; }
-
-  .shopify-live-card {
-    padding: 18px;
-  }
-  .shopify-embed-wrap {
-    width: 100%;
-  }
-  .shopify-embed-wrap .shopify-buy__product {
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 !important;
-  }
-  .shopify-embed-wrap .shopify-buy__product__img-wrapper {
-    margin: 0 0 14px !important;
-    border-radius: 22px;
-    overflow: hidden;
-  }
-  .shopify-embed-wrap .shopify-buy__product-title {
-    font-family: Inter, sans-serif !important;
-    font-size: 22px !important;
-    font-weight: 900 !important;
-    color: #0f172a !important;
-    line-height: 1.15 !important;
-    margin: 6px 0 8px !important;
-  }
-  .shopify-embed-wrap .shopify-buy__product__price {
-    font-family: Inter, sans-serif !important;
-    font-size: 18px !important;
-    font-weight: 800 !important;
-    color: #0f172a !important;
-    margin-bottom: 12px !important;
-  }
-  .shopify-embed-wrap .shopify-buy__btn {
-    font-family: Inter, sans-serif !important;
-    font-size: 15px !important;
-    font-weight: 800 !important;
-    border-radius: 999px !important;
-    padding: 16px 24px !important;
-    width: 100% !important;
-    background: linear-gradient(90deg, #ff8a3d 0%, #ff4fa3 52%, #4fc9ff 100%) !important;
-    color: #ffffff !important;
-    box-shadow: 0 16px 28px rgba(255, 79, 163, 0.24) !important;
-  }
-  .shopify-embed-wrap .shopify-buy__btn[disabled] {
-    opacity: 0.7 !important;
-  }
-  .shopify-embed-wrap .shopify-buy__option-select,
-  .shopify-embed-wrap .shopify-buy__option-select__select,
-  .shopify-embed-wrap .shopify-buy__quantity,
-  .shopify-embed-wrap .shopify-buy__quantity-increment,
-  .shopify-embed-wrap .shopify-buy__quantity-decrement,
-  .shopify-embed-wrap select {
-    font-family: Inter, sans-serif !important;
-  }
-  .shopify-embed-wrap .shopify-buy__option-select {
-    margin: 0 0 12px !important;
-  }
-  .shopify-embed-wrap .shopify-buy__option-select__label {
-    display: block !important;
-    margin: 0 0 6px !important;
-    font-size: 11px !important;
-    letter-spacing: .24em !important;
-    text-transform: uppercase !important;
-    font-weight: 900 !important;
-    color: #f97316 !important;
-  }
-  .shopify-embed-wrap .shopify-buy__option-select__select,
-  .shopify-embed-wrap select {
-    width: 100% !important;
-    min-height: 46px !important;
-    padding: 0 14px !important;
-    border-radius: 16px !important;
-    border: 1px solid rgba(15, 23, 42, 0.12) !important;
-    background: rgba(255,255,255,0.92) !important;
-    color: #0f172a !important;
-    box-shadow: 0 8px 18px rgba(15,23,42,0.06) !important;
-  }
-  .shopify-embed-wrap .shopify-buy__quantity-container {
-    display: flex !important;
-    align-items: center !important;
-    gap: 0 !important;
-    margin: 10px 0 14px !important;
-  }
-  .shopify-embed-wrap .shopify-buy__quantity,
-  .shopify-embed-wrap .shopify-buy__quantity-increment,
-  .shopify-embed-wrap .shopify-buy__quantity-decrement {
-    height: 46px !important;
-    border: 1px solid rgba(15, 23, 42, 0.12) !important;
-    background: rgba(255,255,255,0.92) !important;
-    color: #0f172a !important;
-  }
-  .shopify-embed-wrap .shopify-buy__quantity {
-    min-width: 58px !important;
-    text-align: center !important;
-    font-weight: 800 !important;
-  }
-  .shopify-embed-wrap .shopify-buy__quantity-decrement {
-    border-radius: 16px 0 0 16px !important;
-  }
-  .shopify-embed-wrap .shopify-buy__quantity-increment {
-    border-radius: 0 16px 16px 0 !important;
-  }
-  .shopify-embed-wrap .shopify-buy__btn-wrapper {
-    margin-top: 0 !important;
-  }
-  .shopify-embed-wrap .shopify-buy__btn:hover,
-  .shopify-embed-wrap .shopify-buy__btn:focus {
-    background: #1e293b !important;
-  }
-
-  .footer { padding: 6px 0 72px; }
-  .footer-grid {
-    display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
-    gap: 24px;
-  }
-  .tag-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 24px;
-  }
-  .tag {
-    border-radius: 999px;
-    border: 1px solid rgba(255,255,255,0.72);
-    background: rgba(255,255,255,0.75);
-    padding: 10px 16px;
-    color: #475569;
-    font-size: 14px;
-    font-weight: 700;
-  }
-  .email-card {
-    border-radius: 34px;
-    background: #0f172a;
-    padding: 32px;
-    color: #fff;
-    box-shadow: 0 30px 68px rgba(15,23,42,0.18);
-  }
-  .email-input {
-    width: 100%;
-    height: 52px;
-    margin-top: 20px;
-    padding: 0 16px;
-    border-radius: 18px;
-    border: 1px solid rgba(255,255,255,0.16);
-    background: rgba(255,255,255,0.08);
-    color: #fff;
-    outline: none;
-  }
-  .email-input::placeholder { color: rgba(255,255,255,0.55); }
-  .email-btn {
-    background: #fff;
+    font-weight: 900;
     color: #0f172a;
-    margin-top: 12px;
   }
-  .email-note {
-    margin-top: 14px;
-    font-size: 14px;
-    line-height: 1.7;
-    color: rgba(255,255,255,0.68);
+  .products-footer {
+    display: flex;
+    justify-content: center;
+    margin-top: 26px;
   }
+
+  .footer { padding: 0 0 72px; }
 
   @media (max-width: 1100px) {
-    .hero, .info-grid, .showcase, .footer-grid { grid-template-columns: 1fr; }
-    .grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
-    .row {
+    .hero { grid-template-columns: 1fr; }
+    .products-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .section-header {
       flex-direction: column;
       align-items: flex-start;
     }
@@ -980,14 +790,12 @@ const css = `
     }
   }
   @media (max-width: 768px) {
-    .container {
-      width: min(100% - 22px, 100%);
-    }
+    .container { width: min(100% - 22px, 100%); }
     .hero {
       position: relative;
       display: block;
       padding-top: 92px;
-      padding-bottom: 24px;
+      padding-bottom: 18px;
     }
     .picker-wrap {
       position: absolute;
@@ -1006,7 +814,6 @@ const css = `
     .picker {
       border-radius: 999px;
       padding: 8px 10px;
-      box-shadow: 0 14px 30px rgba(251,146,60,0.12);
       min-height: auto;
     }
     .picker-top,
@@ -1023,20 +830,13 @@ const css = `
       overflow-x: auto;
       scrollbar-width: none;
     }
-    .color-list::-webkit-scrollbar {
-      display: none;
-    }
+    .color-list::-webkit-scrollbar { display: none; }
     .color-btn {
       flex: 0 0 auto;
       padding: 8px 12px;
       font-size: 12px;
       line-height: 1;
       white-space: nowrap;
-    }
-    .logo-scene {
-      width: 100%;
-      max-width: 100%;
-      margin: 6px 0 16px;
     }
     .logo-main {
       width: min(100%, 360px);
@@ -1047,40 +847,19 @@ const css = `
       max-width: 100%;
       font-size: 44px;
     }
-    .body {
-      max-width: 100%;
-      font-size: 18px;
-      line-height: 1.65;
-    }
-    .body-sub {
-      max-width: 100%;
-      font-size: 15px;
-      line-height: 1.6;
-    }
-    .mini-copy {
-      max-width: 100%;
-      font-size: 14px;
-      line-height: 1.6;
-    }
-    .actions {
-      gap: 10px;
-      margin-top: 18px;
-    }
-    .stats, .grid, .featured-grid, .card-grid {
+    .body, .body-sub, .mini-copy { max-width: 100%; }
+    .stats, .products-grid, .featured-grid {
       grid-template-columns: 1fr;
     }
-    .showcase {
-      gap: 16px;
-    }
-    .row-title, .picker-title {
+    .section-title, .picker-title {
       font-size: 30px;
     }
   }
 `;
 
-function HatMock() {
+function HatMock({ tone = "#fff" }) {
   return (
-    <div className="hat">
+    <div className="hat" style={{ "--productBody": tone }}>
       <div className="hat-crown" />
       <div className="hat-brim" />
       <div className="hat-logo"><img src={logoSrc} alt="Suppa Duppa logo" /></div>
@@ -1088,211 +867,70 @@ function HatMock() {
   );
 }
 
-function TankMock() {
+function TankMock({ tone = "#fff" }) {
   return (
-    <div className="tank">
+    <div className="tank" style={{ "--productBody": tone }}>
       <div className="tank-neck" />
       <div className="tank-logo"><img src={logoSrc} alt="Suppa Duppa logo" /></div>
     </div>
   );
 }
 
-function ShopifyBuyButton({ productId }) {
-  const mountRef = useRef(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    let pollId = null;
-
-    const buildButton = () => {
-      if (cancelled || !mountRef.current || !window.ShopifyBuy || !window.ShopifyBuy.UI) return;
-
-      mountRef.current.innerHTML = "";
-
-      const client = window.ShopifyBuy.buildClient({
-        domain: SHOPIFY_DOMAIN,
-        storefrontAccessToken: SHOPIFY_STOREFRONT_TOKEN,
-      });
-
-      window.ShopifyBuy.UI.onReady(client).then((ui) => {
-        if (cancelled || !mountRef.current) return;
-
-        ui.createComponent("product", {
-          id: productId,
-          node: mountRef.current,
-          moneyFormat: "%24%7B%7Bamount%7D%7D",
-          options: {
-            product: {
-              iframe: false,
-              contents: {
-                img: true,
-                title: true,
-                price: true,
-                options: true,
-                button: false,
-                buttonWithQuantity: true,
-                description: false,
-              },
-              text: {
-                button: "Add to cart",
-              },
-              styles: {
-                product: {
-                  width: "100%",
-                  "max-width": "100%",
-                  margin: "0",
-                },
-                title: {
-                  "font-family": "Inter, sans-serif",
-                  "font-size": "22px",
-                  color: "#0f172a",
-                  "font-weight": "900",
-                },
-                price: {
-                  "font-family": "Inter, sans-serif",
-                  "font-size": "18px",
-                  color: "#0f172a",
-                  "font-weight": "800",
-                },
-                button: {
-                  "font-family": "Inter, sans-serif",
-                  "font-size": "15px",
-                  "font-weight": "800",
-                  "background-color": "#ff4fa3",
-                  ":hover": {
-                    "background-color": "#ff3b96",
-                  },
-                  ":focus": {
-                    "background-color": "#ff3b96",
-                  },
-                  "border-radius": "999px",
-                  padding: "16px 24px",
-                  width: "100%",
-                },
-              },
-            },
-            cart: {
-              text: {
-                total: "Subtotal",
-                button: "Checkout",
-              },
-            },
-            toggle: {
-              styles: {
-                toggle: {
-                  "background-color": "#0f172a",
-                  ":hover": {
-                    "background-color": "#1e293b",
-                  },
-                  ":focus": {
-                    "background-color": "#1e293b",
-                  },
-                },
-              },
-            },
-          },
-        });
-      });
-    };
-
-    if (window.ShopifyBuy && window.ShopifyBuy.UI) {
-      buildButton();
-    } else {
-      const existing = document.querySelector('script[data-shopify-buy-sdk="true"]');
-
-      if (!existing) {
-        const script = document.createElement("script");
-        script.async = true;
-        script.src = "https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js";
-        script.dataset.shopifyBuySdk = "true";
-        script.onload = buildButton;
-        document.head.appendChild(script);
-      } else {
-        pollId = window.setInterval(() => {
-          if (window.ShopifyBuy && window.ShopifyBuy.UI) {
-            window.clearInterval(pollId);
-            buildButton();
-          }
-        }, 250);
-      }
-    }
-
-    return () => {
-      cancelled = true;
-      if (pollId) window.clearInterval(pollId);
-      if (mountRef.current) mountRef.current.innerHTML = "";
-    };
-  }, [productId]);
-
-  return <div ref={mountRef} className="shopify-embed-wrap" />;
-}
-
-function ShopifyEmbedCard({ product, selected }) {
-  const isHat = product.type === "Hat";
-
-  if (product.shopifyProductId) {
-    return (
-      <div className="product-card shopify-live-card">
-        <div className="product-badge" style={{ position: "static", display: "inline-flex", marginBottom: 12 }}>
-          {product.badge}
-        </div>
-        <ShopifyBuyButton productId={product.shopifyProductId} />
-      </div>
-    );
-  }
-
+function HoodieMock({ tone = "#7c746f" }) {
   return (
-    <div className="product-card">
-      <div className="product-visual" style={{ backgroundImage: selected.panel }}>
-        <div className="product-accent">{selected.accent}</div>
-        <div className="product-badge">{product.badge}</div>
-        <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-          {isHat ? <HatMock /> : <TankMock />}
-        </div>
-        <div className="product-color">{selected.name}</div>
-      </div>
-      <div className="product-body">
-        <div className="product-top">
-          <div>
-            <div className="product-type">{product.type}</div>
-            <h3 className="product-name">{product.name}</h3>
-          </div>
-          <div className="price">{product.price}</div>
-        </div>
-        <p className="product-copy">{product.vibe}</p>
-        <a className="card-btn" href="#">Shop on Shopify</a>
-        <div className="help-box">Add the next Shopify Buy Button code for this card.</div>
-      </div>
+    <div className="hoodie" style={{ "--productBody": tone }}>
+      <div className="hoodie-hood" />
+      <div className="hoodie-logo"><img src={logoSrc} alt="Suppa Duppa logo" /></div>
+      <div className="hoodie-pocket" />
     </div>
   );
 }
 
-function MockupShowcase() {
+function TeeMock({ tone = "#fff" }) {
   return (
-    <div className="showcase">
-      <div className="card">
-        <div className="card-grid">
-          <div className="card-side card-side-a">
-            <div className="chip chip-pink">Hero logo preview</div>
-            <div className="logo-panel"><img src={logoSrc} alt="Suppa Duppa logo" /></div>
-            <p className="showcase-copy">This shows how the Suppa Duppa logo lands on the homepage with a sunny beach backdrop and smoother summer energy.</p>
-          </div>
-          <div className="card-side card-side-b">
-            <div className="chip chip-cyan">Lifestyle mockup</div>
-            <div style={{ display: "flex", justifyContent: "center", padding: "24px 0" }}><HatMock /></div>
-            <div style={{ marginTop: 24, borderRadius: 24, background: "rgba(255,255,255,0.68)", padding: 16 }}>
-              <div style={{ fontSize: 18, fontWeight: 900, color: "#0f172a" }}>Suppa Duppa Snapback</div>
-              <p style={{ margin: "8px 0 0", fontSize: 14, lineHeight: 1.65, color: "#475569" }}>Quick mockup preview for how the logo can sit on hats inside the store before product photos are added.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="card tank-card-side">
-        <div className="chip chip-orange">Tank mockup</div>
-        <div className="tank-card-panel"><TankMock /></div>
-        <p style={{ margin: "18px 0 0", fontSize: 14, lineHeight: 1.75, color: "#475569" }}>Preview of the logo placed on a tank top product card for the summer collection section.</p>
-      </div>
+    <div className="tee" style={{ "--productBody": tone }}>
+      <div className="tee-sleeve-left" />
+      <div className="tee-sleeve-right" />
+      <div className="tee-neck" />
+      <div className="tee-logo"><img src={logoSrc} alt="Suppa Duppa logo" /></div>
     </div>
+  );
+}
+
+function ProductVisual({ kind }) {
+  if (kind === "tank") return <TankMock tone="#2996ff" />;
+  if (kind === "hoodie") return <HoodieMock tone="#7a756f" />;
+  if (kind === "denimHat") return <HatMock tone="#bcd3df" />;
+  if (kind === "blackHat") return <HatMock tone="#282828" />;
+  if (kind === "tee") return <TeeMock tone="#ffffff" />;
+  return <HatMock tone="#111111" />;
+}
+
+function FeaturedCard({ product, selected }) {
+  return (
+    <a className="product-link" href={product.shopUrl} target="_blank" rel="noreferrer">
+      <article className="product-card">
+        <div className="product-visual" style={{ "--panelGradient": selected.panel }}>
+          <div className="product-accent">{selected.accent}</div>
+          <div className="product-badge">{product.badge}</div>
+          <div className="product-visual-inner">
+            <ProductVisual kind={product.render} />
+          </div>
+          <div className="product-color">{selected.name}</div>
+        </div>
+        <div className="product-body">
+          <div className="product-top">
+            <div>
+              <div className="product-type">{product.type}</div>
+              <h3 className="product-name">{product.name}</h3>
+            </div>
+            <div className="price">{product.price}</div>
+          </div>
+          <p className="product-copy">{product.vibe}</p>
+          <div className="product-cta"><span>Shop now</span><span>→</span></div>
+        </div>
+      </article>
+    </a>
   );
 }
 
@@ -1309,6 +947,7 @@ export default function App() {
           "--siteGradient": selected.gradient,
           "--glowA": selected.glowA,
           "--glowB": selected.glowB,
+          "--panelGradient": selected.panel,
         }}
       >
         <div className="ambient one" />
@@ -1322,23 +961,23 @@ export default function App() {
               <div className="pill"><span className="spark" />Summer drop is live</div>
               <p className="kicker">How You Feelin'? Suppa Duppa.</p>
               <div className="logo-scene">
-                <div className="logo-frame"><img src={logoSrc} alt="Suppa Duppa" className="logo-main" /></div>
+                <img src={logoSrc} alt="Suppa Duppa" className="logo-main" />
               </div>
               <p className="mini-copy">Bright logo. Clean layout. Soft beach energy. A smoother first look that feels easy to shop.</p>
               <h1 className="title"><span className="gradient-text">Beach-ready hats and tanks with pure summer mood.</span></h1>
               <p className="body">Suppa Duppa feels like walking barefoot on warm sand, catching ocean breeze, and pulling up in bright colors that make the whole day feel lighter.</p>
               <p className="body-sub">Soft ocean breeze, clean color, smooth summer energy, and a fresh feel that fits the whole mood right.</p>
               <div className="actions">
-                <a href="https://shop.suppaduppa.us/collections/suppaduppa-summer-drop" className="btn">
+                <a href={COLLECTION_URL} className="btn" target="_blank" rel="noreferrer">
                   <span>🛍️</span><span>Shop the collection</span>
                 </a>
-                <a href="https://shop.suppaduppa.us/collections/all" className="btn-outline">
+                <a href={ALL_PRODUCTS_URL} className="btn-outline" target="_blank" rel="noreferrer">
                   <span>🌊</span><span>View summer colors</span>
                 </a>
               </div>
               <div className="stats">
-                <div className="stat"><div className="stat-number">4</div><div className="stat-label">Colorways ready</div></div>
-                <div className="stat"><div className="stat-number">2</div><div className="stat-label">Summer staples</div></div>
+                <div className="stat"><div className="stat-number">6</div><div className="stat-label">Featured products</div></div>
+                <div className="stat"><div className="stat-number">4</div><div className="stat-label">Color moods</div></div>
                 <div className="stat"><div className="stat-number">100%</div><div className="stat-label">Beach vibe energy</div></div>
               </div>
             </div>
@@ -1365,83 +1004,49 @@ export default function App() {
                     </button>
                   ))}
                 </div>
-                <div className="featured" style={{ backgroundImage: selected.panel }}>
+                <div className="featured">
                   <div className="featured-card">
                     <div className="featured-label">Featured look</div>
                     <div className="featured-grid">
                       <div className="product-mini">
-                        <div className="product-mini-logo"><HatMock /></div>
+                        <ProductVisual kind="hat" />
                         <div className="product-mini-title">Hat</div>
                       </div>
                       <div className="product-mini">
-                        <div className="product-mini-logo"><TankMock /></div>
+                        <ProductVisual kind="tank" />
                         <div className="product-mini-title">Tank</div>
                       </div>
                     </div>
-                    <p className="featured-copy">{selected.name} makes the whole fit feel fresh, playful, and made for the shoreline.</p>
+                    <p style={{ marginTop: 16, textAlign: "center", color: "rgba(255,255,255,0.96)", fontSize: 15, lineHeight: 1.6, fontWeight: 700 }}>
+                      {selected.name} makes the whole fit feel fresh, playful, and made for the shoreline.
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
           </section>
 
-          <section id="shopify-products" className="shopify">
-            <div className="row">
+          <section className="products-section" id="featured-products">
+            <div className="section-header">
               <div>
-                <div className="row-kicker">Summer collection</div>
-                <h2 className="row-title">Different color hats and tank tops</h2>
+                <div className="section-kicker">Featured products</div>
+                <h2 className="section-title">A few Suppa Duppa favorites right on the homepage</h2>
               </div>
-              <p className="row-copy">A bright mix of clean neutrals, ocean blues, tropical greens, and sunset tones so every piece feels like vacation mode.</p>
+              <p className="section-copy">Keep the custom branded front page clean, then send people straight into the live Shopify store when they tap a product.</p>
             </div>
 
-            <div className="info-card">
-              <div className="info-grid">
-                <div>
-                  <div className="row-kicker" style={{ color: "#0891b2" }}>Shopify-ready section</div>
-                  <h3 style={{ margin: "10px 0 0", fontSize: 34, lineHeight: 1.1, color: "#0f172a" }}>Drop your Shopify products right into this layout.</h3>
-                  <p style={{ margin: "14px 0 0", maxWidth: 720, fontSize: 16, lineHeight: 1.8, color: "#64748b" }}>The first card is live with a real Shopify product image, variant picker, quantity controls, price, and add-to-cart button. Add the next Buy Button product IDs the same way for the rest of your featured products.</p>
-                </div>
-                <div className="dark-card">
-                  <div className="row-kicker" style={{ color: "#67e8f9" }}>How to use it</div>
-                  <ol className="dark-list">
-                    <li>Create a Product Buy Button in Shopify.</li>
-                    <li>Copy the product ID from the code.</li>
-                    <li>Paste that product ID into the next card in this file.</li>
-                  </ol>
-                </div>
-              </div>
-            </div>
-
-            <MockupShowcase />
-
-            <div className="grid">
-              {products.map((product) => (
-                <ShopifyEmbedCard key={product.id} product={product} selected={selected} />
+            <div className="products-grid">
+              {featuredProducts.map((product) => (
+                <FeaturedCard key={product.id} product={product} selected={selected} />
               ))}
             </div>
-          </section>
 
-          <section className="footer">
-            <div className="footer-grid">
-              <div className="card" style={{ padding: 32 }}>
-                <div className="row-kicker" style={{ color: "#0891b2" }}>Store mood</div>
-                <h3 style={{ margin: "10px 0 0", fontSize: 48, lineHeight: 1.05, color: "#0f172a" }}>Walk the sand. Catch the light. Wear the feeling.</h3>
-                <p style={{ margin: "18px 0 0", maxWidth: 760, fontSize: 20, lineHeight: 1.8, color: "#475569" }}>The whole site is built around a beach-day feeling — airy space, sun-washed colors, playful energy, and product cards that feel easy to shop on phone or desktop.</p>
-                <div className="tag-list">
-                  {["Beach launch banner", "Color-ready product grid", "Mobile-friendly layout", "Shopify-ready product cards"].map((tag) => (
-                    <span key={tag} className="tag">{tag}</span>
-                  ))}
-                </div>
-              </div>
-              <div className="email-card">
-                <div className="row-kicker" style={{ color: "#67e8f9" }}>Email sign-up</div>
-                <h3 style={{ margin: "10px 0 0", fontSize: 38, lineHeight: 1.1, color: "#fff" }}>Get first access to new colors and beach drops.</h3>
-                <input className="email-input" placeholder="Email address" />
-                <button type="button" className="email-btn">Join the Suppa Duppa list</button>
-                <p className="email-note">Bright fits, summer drops, and fresh beach energy straight to your inbox.</p>
-              </div>
+            <div className="products-footer">
+              <a href={ALL_PRODUCTS_URL} className="view-all-btn" target="_blank" rel="noreferrer">View all products</a>
             </div>
           </section>
+
+          <section className="footer" />
         </div>
       </div>
     </>
