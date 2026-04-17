@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import logoSrc from "./suppa-duppa-logo.png";
 
 const hatColors = [
@@ -36,14 +36,18 @@ const hatColors = [
   },
 ];
 
+const SHOPIFY_DOMAIN = "kynxwh-eq.myshopify.com";
+const SHOPIFY_STOREFRONT_TOKEN = "998596932716baa15b75073a8d30b9f3";
+
 const products = [
   {
     id: "suppa-duppa-snapback",
-    name: "Suppa Duppa Snapback",
+    name: "Suppa Duppa Washed Denim Cap",
     type: "Hat",
     vibe: "Light, bright, and easy for sunny fits.",
-    price: "$34",
+    price: "$31.44",
     badge: "Best Seller",
+    shopifyProductId: "9171226067170",
   },
   {
     id: "wave-runner-tank",
@@ -970,6 +974,119 @@ function TankMock() {
 
 
 
+function ShopifyBuyButton({ productId }) {
+  const mountRef = useRef(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    let pollId = null;
+
+    const buildButton = () => {
+      if (cancelled || !mountRef.current || !window.ShopifyBuy || !window.ShopifyBuy.UI) return;
+
+      mountRef.current.innerHTML = "";
+
+      const client = window.ShopifyBuy.buildClient({
+        domain: SHOPIFY_DOMAIN,
+        storefrontAccessToken: SHOPIFY_STOREFRONT_TOKEN,
+      });
+
+      window.ShopifyBuy.UI.onReady(client).then((ui) => {
+        if (cancelled || !mountRef.current) return;
+
+        ui.createComponent("product", {
+          id: productId,
+          node: mountRef.current,
+          moneyFormat: "%24%7B%7Bamount%7D%7D",
+          options: {
+            product: {
+              iframe: false,
+              contents: {
+                img: false,
+                title: false,
+                price: false,
+              },
+              text: {
+                button: "Add to cart",
+              },
+              styles: {
+                product: {
+                  margin: "0",
+                  width: "100%",
+                },
+                button: {
+                  "font-family": "Inter, sans-serif",
+                  "font-size": "15px",
+                  "font-weight": "800",
+                  "background-color": "#0f172a",
+                  ":hover": {
+                    "background-color": "#1e293b",
+                  },
+                  ":focus": {
+                    "background-color": "#1e293b",
+                  },
+                  "border-radius": "999px",
+                  padding: "16px 24px",
+                  width: "100%",
+                },
+              },
+            },
+            cart: {
+              text: {
+                total: "Subtotal",
+                button: "Checkout",
+              },
+            },
+            toggle: {
+              styles: {
+                toggle: {
+                  "background-color": "#0f172a",
+                  ":hover": {
+                    "background-color": "#1e293b",
+                  },
+                  ":focus": {
+                    "background-color": "#1e293b",
+                  },
+                },
+              },
+            },
+          },
+        });
+      });
+    };
+
+    if (window.ShopifyBuy && window.ShopifyBuy.UI) {
+      buildButton();
+    } else {
+      const existing = document.querySelector('script[data-shopify-buy-sdk="true"]');
+
+      if (!existing) {
+        const script = document.createElement("script");
+        script.async = true;
+        script.src = "https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js";
+        script.dataset.shopifyBuySdk = "true";
+        script.onload = buildButton;
+        document.head.appendChild(script);
+      } else {
+        pollId = window.setInterval(() => {
+          if (window.ShopifyBuy && window.ShopifyBuy.UI) {
+            window.clearInterval(pollId);
+            buildButton();
+          }
+        }, 250);
+      }
+    }
+
+    return () => {
+      cancelled = true;
+      if (pollId) window.clearInterval(pollId);
+      if (mountRef.current) mountRef.current.innerHTML = "";
+    };
+  }, [productId]);
+
+  return <div ref={mountRef} style={{ marginTop: 14, width: "100%" }} />;
+}
+
 function ShopifyEmbedCard({ product, selected }) {
   const isHat = product.type === "Hat";
   return (
@@ -991,8 +1108,14 @@ function ShopifyEmbedCard({ product, selected }) {
           <div className="price">{product.price}</div>
         </div>
         <p className="product-copy">{product.vibe}</p>
-        <a className="card-btn" href="#">Shop on Shopify</a>
-        <div className="help-box">Paste your Shopify Buy Button embed code into <strong>buyButtonHtml</strong>, or add your Shopify product link to <strong>shopifyUrl</strong>.</div>
+        {product.shopifyProductId ? (
+          <ShopifyBuyButton productId={product.shopifyProductId} />
+        ) : (
+          <>
+            <a className="card-btn" href="#">Shop on Shopify</a>
+            <div className="help-box">Add a Shopify Buy Button or product link for this card next.</div>
+          </>
+        )}
       </div>
     </div>
   );
