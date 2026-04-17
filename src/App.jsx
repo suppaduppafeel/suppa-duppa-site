@@ -59,7 +59,7 @@ const featuredProducts = [
     badge: "Best Seller",
     vibe: "Easy everyday cap with clean Suppa Duppa energy.",
     shopUrl: "https://shop.suppaduppa.us/products/suppaduppa-5-panel-cap",
-    handle: "suppaduppa-5-panel-cap",
+    handle: "5-panel-cap",
     render: "hat",
   },
   {
