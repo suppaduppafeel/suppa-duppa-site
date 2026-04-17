@@ -1329,8 +1329,12 @@ export default function App() {
               <p className="body">Suppa Duppa feels like walking barefoot on warm sand, catching ocean breeze, and pulling up in bright colors that make the whole day feel lighter.</p>
               <p className="body-sub">Soft ocean breeze, clean color, smooth summer energy, and a fresh feel that fits the whole mood right.</p>
               <div className="actions">
-                <a href="#shopify-products" className="btn"><span>🛍️</span><span>Shop the collection</span></a>
-                <a href="#shopify-products" className="btn-outline"><span>🌊</span><span>View summer colors</span></a>
+                <a href="https://shop.suppaduppa.us/collections/suppaduppa-summer-drop" className="btn">
+                  <span>🛍️</span><span>Shop the collection</span>
+                </a>
+                <a href="https://shop.suppaduppa.us/collections/all" className="btn-outline">
+                  <span>🌊</span><span>View summer colors</span>
+                </a>
               </div>
               <div className="stats">
                 <div className="stat"><div className="stat-number">4</div><div className="stat-label">Colorways ready</div></div>
