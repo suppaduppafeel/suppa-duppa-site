@@ -1,5 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import logoSrc from "./suppa-duppa-logo.png";
+import hoodieImage from "./Oversized heavyweight hoodie.png";
+import fivePanelImage from "./SuppaDuppa 5 panel cap.png";
+import truckerImage from "./SuppaDuppa Foam Trucker Cap.png";
+import vintageImage from "./SuppaDuppa Vintage Cotton Twill Cap.png";
 
 const COLLECTION_URL = "https://shop.suppaduppa.us/collections/suppaduppa-summer-drop";
 const ALL_PRODUCTS_URL = "https://shop.suppaduppa.us/collections/all";
@@ -60,6 +64,7 @@ const featuredProducts = [
     vibe: "Easy everyday cap with clean Suppa Duppa energy.",
     shopUrl: "https://shop.suppaduppa.us/products/suppaduppa-5-panel-cap",
     handle: "5-panel-cap",
+    imageSrc: fivePanelImage,
     render: "hat",
   },
   {
@@ -71,6 +76,7 @@ const featuredProducts = [
     vibe: "A lighter cap look with playful summer pop.",
     shopUrl: "https://shop.suppaduppa.us/products/suppaduppa-foam-trucker-cap",
     handle: "suppaduppa-foam-trucker-cap",
+    imageSrc: truckerImage,
     render: "hat",
   },
   {
@@ -93,6 +99,7 @@ const featuredProducts = [
     vibe: "Vintage texture with a smoother, elevated finish.",
     shopUrl: "https://shop.suppaduppa.us/products/suppaduppa-vintage-cotton-twill-cap",
     handle: "vintage-cotton-twill-cap",
+    imageSrc: vintageImage,
     render: "blackHat",
   },
   {
@@ -104,6 +111,7 @@ const featuredProducts = [
     vibe: "A clean heavyweight piece for breezy nights.",
     shopUrl: "https://shop.suppaduppa.us/products/oversized-heavyweight-hoodie",
     handle: "oversized-heavyweight-hoodie",
+    imageSrc: hoodieImage,
     render: "hoodie",
   },
 ];
@@ -947,7 +955,8 @@ function useShopifyProductImage(handle) {
 }
 
 function FeaturedCard({ product, selected }) {
-  const imageUrl = useShopifyProductImage(product.handle);
+  const shopifyImage = useShopifyProductImage(product.handle);
+  const imageUrl = product.imageSrc || shopifyImage;
 
   return (
     <a className="product-link" href={product.shopUrl}>
