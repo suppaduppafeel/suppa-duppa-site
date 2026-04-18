@@ -45,17 +45,6 @@ const hatColors = [
 
 const featuredProducts = [
   {
-    id: "summer-tank",
-    name: "SuppaDuppa Summer Tank",
-    type: "Tank",
-    price: "$29.50",
-    badge: "Hot Drop",
-    vibe: "Bright, breezy, and ready for shoreline weather.",
-    shopUrl: "https://shop.suppaduppa.us/products/suppaduppa-summer-tank",
-    handle: "suppaduppa-summer-tank",
-    render: "tank",
-  },
-  {
     id: "five-panel-cap",
     name: "SuppaDuppa 5 Panel Cap",
     type: "Hat",
@@ -101,6 +90,17 @@ const featuredProducts = [
     handle: "vintage-cotton-twill-cap",
     imageSrc: vintageImage,
     render: "blackHat",
+  },
+  {
+    id: "summer-tank",
+    name: "SuppaDuppa Summer Tank",
+    type: "Tank",
+    price: "$29.50",
+    badge: "Hot Drop",
+    vibe: "Bright, breezy, and ready for shoreline weather.",
+    shopUrl: "https://shop.suppaduppa.us/products/suppaduppa-summer-tank",
+    handle: "suppaduppa-summer-tank",
+    render: "tank",
   },
   {
     id: "oversized-hoodie",
