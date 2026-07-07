@@ -28,7 +28,6 @@ export default function ProductCard({ product, selected }) {
   const colorData = useMemo(() => getColorData(productData), [productData]);
   const [color, setColor] = useState("");
   const [saved, setSaved] = useState(false);
-  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (colorData.values.length) {
@@ -128,31 +127,9 @@ export default function ProductCard({ product, selected }) {
 
         <div className="card-actions">
           <button type="button" className="card-btn" onClick={addToCart}>Add to cart</button>
-          <button type="button" className="card-secondary" onClick={() => setOpen(true)}>Quick view</button>
+          <a className="card-secondary" href={product.shopUrl}>Quick view</a>
         </div>
       </div>
-
-      {open && (
-        <div className="quick-view">
-          <button type="button" className="quick-close" onClick={() => setOpen(false)} aria-label="Close quick view">×</button>
-          <div className="quick-view-media" style={{ "--panelGradient": selected.panel }}>
-            {image ? (
-              <img className="quick-view-img" src={image} alt={product.name} />
-            ) : (
-              <ProductMock kind={product.render} />
-            )}
-          </div>
-          <div className="quick-view-type">{product.type}</div>
-          <h3>{product.name}</h3>
-          <div className="quick-view-price">{price}</div>
-          {color ? <p className="quick-view-color">Color: {color}</p> : null}
-          <p>{product.vibe}</p>
-          <div className="quick-view-actions">
-            <button type="button" className="card-btn" onClick={addToCart}>Add to cart</button>
-            <a className="card-secondary" href={product.shopUrl}>View full product</a>
-          </div>
-        </div>
-      )}
     </article>
   );
 }
