@@ -369,8 +369,35 @@ function FeaturedCard({ product, selected }) {
     setSelectedColor(colorMeta.colorValues[nextIndex]);
   }
 
-  function handleAddToCart(event) {
-    event.preventDefault();
+async function handleAddToCart(event) {
+  event.preventDefault();
+  event.stopPropagation();
+
+  const variantId = selectedVariant?.id;
+
+  if (!variantId) {
+    window.location.href = product.shopUrl;
+    return;
+  }
+
+  try {
+    await fetch(`${SHOP_BASE}/cart/add.js`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        id: variantId,
+        quantity: 1,
+      }),
+    });
+
+    window.location.href = CART_URL;
+  } catch (error) {
+    window.location.href = `${SHOP_BASE}/cart/${variantId}:1`;
+  }
+}    event.preventDefault();
     if (!variantId) {
       window.location.href = product.shopUrl;
       return;
