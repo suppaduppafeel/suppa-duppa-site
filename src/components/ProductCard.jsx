@@ -106,28 +106,22 @@ export default function ProductCard({ product, selected }) {
         <p>{product.vibe}</p>
 
         {colorData.values.length > 1 && (
-          <div className="variant-row">
-            <button
-              type="button"
-              onClick={() => setColor(colorData.values[activeIndex <= 0 ? colorData.values.length - 1 : activeIndex - 1])}
-              aria-label="Previous color"
-            >
-              ‹
-            </button>
+          <label className="product-color-slider">
             <span>{color}</span>
-            <button
-              type="button"
-              onClick={() => setColor(colorData.values[activeIndex >= colorData.values.length - 1 ? 0 : activeIndex + 1])}
-              aria-label="Next color"
-            >
-              ›
-            </button>
-          </div>
+            <input
+              type="range"
+              min="0"
+              max={colorData.values.length - 1}
+              value={activeIndex}
+              onChange={(event) => setColor(colorData.values[Number(event.target.value)])}
+              aria-label={`${product.name} color`}
+            />
+          </label>
         )}
 
         <div className="card-actions">
           <button type="button" className="card-btn" onClick={addToCart}>Add to cart</button>
-          <a className="card-secondary" href={product.shopUrl}>Quick view</a>
+          <a className="card-secondary" href={product.shopUrl}>View product</a>
         </div>
       </div>
     </article>
